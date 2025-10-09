@@ -1,6 +1,8 @@
 package com.myname.commandmodid;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
@@ -16,11 +18,16 @@ public class TimerOverlay {
     public static String timerText = "";
     public static final Queue<String> announcements = new LinkedList<>();
     public static final Queue<String> personalMessages = new LinkedList<>();
+
     private static long announcementTimestamp = 0;
     private static long personalMessageTimestamp = 0;
+
     private static final long ANNOUNCEMENT_DURATION = 3000;
     private static final long PERSONAL_DURATION = 2000;
 
+    public static final Map<String, String> multiFlagTimers = new HashMap<>();
+
+    // Отрисовка оверлея
     @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent.Text event) {
         Minecraft mc = Minecraft.getMinecraft();
@@ -42,6 +49,19 @@ public class TimerOverlay {
             GL11.glPopMatrix();
         }
 
+        int y = 40;
+        for (Map.Entry<String, String> entry : multiFlagTimers.entrySet()) {
+            String flagName = entry.getKey();
+            String timer = entry.getValue();
+            String text = "Флаг " + flagName + ": " + timer;
+            GL11.glPushMatrix();
+            GL11.glScalef(1.5F, 1.5F, 1.5F);
+            int timerWidth = mc.fontRenderer.getStringWidth(text);
+            mc.fontRenderer
+                .drawStringWithShadow(text, (int) ((width / 2 - timerWidth / 2) / 1.5F), (int) (y / 1.5F), 0x55FF55);
+            GL11.glPopMatrix();
+            y += 24;
+        }
         // Последнее объявление по центру, крупно, исчезает через ANNOUNCEMENT_DURATION
         String lastAnnouncement = announcements.peek();
         if (lastAnnouncement != null && !lastAnnouncement.isEmpty()) {
@@ -88,5 +108,19 @@ public class TimerOverlay {
         if (personalMessages.size() > 3) personalMessages.poll();
         personalMessages.offer(msg);
         personalMessageTimestamp = System.currentTimeMillis();
+    }
+
+    // установка и обновление таймера мультифлагов
+    public static void setMultiFlagTimer(String flagName, String timerText) {
+        if (timerText == null || timerText.isEmpty()) {
+            multiFlagTimers.remove(flagName);
+        } else {
+            multiFlagTimers.put(flagName, timerText);
+        }
+    }
+
+    // Очистить все таймеры мультифлагов (например, при завершении раунда)
+    public static void clearMultiFlagTimers() {
+        multiFlagTimers.clear();
     }
 }

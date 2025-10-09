@@ -9,6 +9,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent;
@@ -16,33 +18,78 @@ import net.minecraftforge.event.world.BlockEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 
 public class BlockPlacementHandler {
 
     public static boolean flagplaced = false;
-    private static final Set<Block> ALLOWED_BLOCKS = new HashSet<>(Arrays.asList(Blocks.stained_glass, Blocks.wool));
+    private static final Set<Block> ALLOWED_BLOCKS = new HashSet<>(Arrays.asList(Blocks.stained_glass));
+    // дефолтный цвет белый
+    private static int flagColorIndex = 0;
 
-    private static final String[] COLOR_NAMES = { "белая", "оранжевая", "пурпурная", "голубая", "желтая", "лаймовая",
-        "розовая", "серая", "светло-серая", "бирюзовая", "фиолетовая", "синяя", "коричневая", "зеленая", "красная",
-        "черная" };
-    private static final String[] COLOR_CODES = { "§f", // белая
-        "§6", // оранжевая
-        "§d", // пурпурная
-        "§b", // голубая
-        "§e", // желтая
-        "§a", // лаймовая
-        "§d", // розовая (можно §d или §c)
-        "§8", // серая
-        "§7", // светло-серая
-        "§3", // бирюзовая
-        "§5", // фиолетовая
-        "§9", // синяя
-        "§6", // коричневая (ближайший — оранжевый)
-        "§2", // зеленая
-        "§c", // красная
-        "§0" // черная
-    };
+    // Проверяет, совпадают ли координаты с точкой флага
+    public static void setFlagColorIndex(int idx) {
+        flagColorIndex = (idx >= 0 && idx < FlagColors.COLORS.length) ? idx : 0;
+    }
+
+    public static int getFlagColorIndex() {
+        return flagColorIndex;
+    }
+
+    public static float getFlagR() {
+        return FlagColors.getColor(flagColorIndex)[0];
+    }
+
+    public static float getFlagG() {
+        return FlagColors.getColor(flagColorIndex)[1];
+    }
+
+    public static float getFlagB() {
+        return FlagColors.getColor(flagColorIndex)[2];
+    }
+
+    @SubscribeEvent
+    public void onServerTick(TickEvent.ServerTickEvent event) {
+        // Проверяем только если флаг был установлен
+        if (flagplaced) {
+            World world = DimensionManager.getWorld(0); // 0 — обычный мир (Overworld)
+            if (world != null) {
+                int x = FlagPointCommand.flagPointX;
+                int y = FlagPointCommand.flagPointY;
+                int z = FlagPointCommand.flagPointZ;
+                Block block = world.getBlock(x, y, z);
+                if (!ALLOWED_BLOCKS.contains(block)) {
+                    flagplaced = false;
+                    PhaseActionBarTimer.stop();
+                    CommandMod.network.sendToAll(new PacketTimerText(""));
+                    CommandMod.network.sendToAll(new PacketAnnouncement("Флаг был сброшен!"));
+                    CommandMod.network.sendToAll(
+                        new PacketFlagBeam(
+                            FlagPointCommand.flagPointX,
+                            FlagPointCommand.flagPointY,
+                            FlagPointCommand.flagPointZ,
+                            0,
+                            true));
+                }
+            }
+        }
+        if (FlagPointCommand.flagPointSet) {
+            World world = DimensionManager.getWorld(0); // 0 — Overworld
+            if (world != null) {
+                int x = FlagPointCommand.flagPointX;
+                int y = FlagPointCommand.flagPointY;
+                int z = FlagPointCommand.flagPointZ;
+                for (int dy = 1; dy <= 20; dy++) {
+                    int checkY = y + dy;
+                    Block block = world.getBlock(x, checkY, z);
+                    if (block != Blocks.air) {
+                        world.setBlock(x, checkY, z, Blocks.air, 0, 2); // 2 — обновить клиентам
+                    }
+                }
+            }
+        }
+    }
 
     @SubscribeEvent(priority = EventPriority.NORMAL)
     public void onBlockBreak(BlockEvent.BreakEvent event) {
@@ -59,7 +106,13 @@ public class BlockPlacementHandler {
             }
             if (event.getPlayer() != null) {
                 CommandMod.network.sendToAll(new PacketAnnouncement("Флаг был сброшен!"));
-
+                CommandMod.network.sendToAll(
+                    new PacketFlagBeam(
+                        FlagPointCommand.flagPointX,
+                        FlagPointCommand.flagPointY,
+                        FlagPointCommand.flagPointZ,
+                        0,
+                        true));
             }
 
         }
@@ -67,6 +120,49 @@ public class BlockPlacementHandler {
 
     @SubscribeEvent
     public void onBlockPlace(PlayerInteractEvent event) {
+        if (FlagPointCommand.flagPointSet && event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+            // Только на сервере!
+            if (event.entityPlayer.worldObj.isRemote) return;
+
+            int flagX = FlagPointCommand.flagPointX;
+            int flagY = FlagPointCommand.flagPointY;
+            int flagZ = FlagPointCommand.flagPointZ;
+
+            int placeX = event.x;
+            int placeY = event.y;
+            int placeZ = event.z;
+
+            switch (event.face) {
+                case 0:
+                    placeY--;
+                    break;
+                case 1:
+                    placeY++;
+                    break;
+                case 2:
+                    placeZ--;
+                    break;
+                case 3:
+                    placeZ++;
+                    break;
+                case 4:
+                    placeX--;
+                    break;
+                case 5:
+                    placeX++;
+                    break;
+            }
+
+            if (placeX == flagX && placeZ == flagZ && placeY > flagY && placeY <= flagY + 20) {
+                if (event.entityPlayer instanceof EntityPlayerMP) {
+                    CommandMod.network.sendTo(
+                        new PacketPersonalMessage("Над флагом нельзя строить"),
+                        (EntityPlayerMP) event.entityPlayer);
+                }
+                event.setCanceled(true);
+            }
+        }
+
         if (event.action != Action.RIGHT_CLICK_BLOCK) return;
         if (FMLCommonHandler.instance()
             .getEffectiveSide() != Side.SERVER) return;
@@ -78,22 +174,22 @@ public class BlockPlacementHandler {
         switch (event.face) {
             case 0:
                 placeY--;
-                break; // низ
+                break;
             case 1:
                 placeY++;
-                break; // верх
+                break;
             case 2:
                 placeZ--;
-                break; // север
+                break;
             case 3:
                 placeZ++;
-                break; // юг
+                break;
             case 4:
                 placeX--;
-                break; // запад
+                break;
             case 5:
                 placeX++;
-                break; // восток
+                break;
         }
 
         // Проверяем, что ставят блок ИМЕННО на координаты флага
@@ -120,26 +216,28 @@ public class BlockPlacementHandler {
             int metadata = itemStack.getItemDamage();
             CommandMod.network.sendToAll(
                 new PacketAnnouncement(
-                    getColorCode(metadata) + "Команда " + getColorName(metadata) + " поставила флаг!"));
+                    FlagColors.getColorCode(metadata) + "Команда "
+                        + FlagColors.getColorName(metadata)
+                        + " поставила флаг!"));
+            CommandMod.network.sendToAll(
+                new PacketFlagBeam(
+                    FlagPointCommand.flagPointX,
+                    FlagPointCommand.flagPointY,
+                    FlagPointCommand.flagPointZ,
+                    metadata,
+                    true));
             flagplaced = true;
+            setFlagColorIndex(metadata);
             PhaseActionBarTimer.start();
 
         } else {
             CommandMod.network
-                .sendTo(new PacketPersonalMessage("Можно ставить только шерсть или стекло!"), (EntityPlayerMP) player);
+                .sendTo(new PacketPersonalMessage("Можно ставить только стекло!"), (EntityPlayerMP) player);
             event.setCanceled(true);
         }
     }
 
     private boolean isFlagPoint(int x, int y, int z) {
         return x == FlagPointCommand.flagPointX && y == FlagPointCommand.flagPointY && z == FlagPointCommand.flagPointZ;
-    }
-
-    private String getColorName(int metadata) {
-        return (metadata >= 0 && metadata < COLOR_NAMES.length) ? COLOR_NAMES[metadata] : "неизвестная";
-    }
-
-    private static String getColorCode(int meta) {
-        return (meta >= 0 && meta < COLOR_CODES.length) ? COLOR_CODES[meta] : "§f";
     }
 }

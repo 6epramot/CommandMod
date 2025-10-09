@@ -60,10 +60,12 @@ public class FlagPointCommand extends CommandBase {
             flagPointX = parseInt(sender, args[0]);
             flagPointY = parseInt(sender, args[1]);
             flagPointZ = parseInt(sender, args[2]);
+
             if (flagPointY < 0 || flagPointY > 255) {
                 throw new CommandException("commands.flagpoint.invalidY");
             }
             flagPointSet = true;
+            CommandMod.network.sendToAll(new PacketFlagBeam(flagPointX, flagPointY, flagPointZ, 0, true));
             sender.addChatMessage(
                 new ChatComponentText(
                     EnumChatFormatting.GREEN + "Flag point set to: "
@@ -99,6 +101,7 @@ public class FlagPointCommand extends CommandBase {
         preparationTimeMinutes = min;
         preparationTimeSeconds = Integer.parseInt(args[2]);
         preparationPhase = true;
+
         PhaseActionBarTimer.start();
         sender.addChatMessage(
             new ChatComponentText(

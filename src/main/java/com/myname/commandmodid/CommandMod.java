@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -32,10 +33,14 @@ public class CommandMod {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
+
         proxy.init(event);
         network.registerMessage(PacketTimerText.Handler.class, PacketTimerText.class, 0, Side.CLIENT);
         network.registerMessage(PacketAnnouncement.Handler.class, PacketAnnouncement.class, 1, Side.CLIENT);
         network.registerMessage(PacketPersonalMessage.Handler.class, PacketPersonalMessage.class, 2, Side.CLIENT);
+        network.registerMessage(PacketFlagBeam.Handler.class, PacketFlagBeam.class, 3, Side.CLIENT);
+        network.registerMessage(PacketAllFlags.Handler.class, PacketAllFlags.class, 4, Side.CLIENT);
+        network.registerMessage(PacketMultiFlagTimer.Handler.class, PacketMultiFlagTimer.class, 5, Side.CLIENT);
     }
 
     @EventHandler
@@ -46,6 +51,20 @@ public class CommandMod {
     @EventHandler
     public void serverLoad(FMLServerStartingEvent event) {
         event.registerServerCommand(new FlagPointCommand());
+        event.registerServerCommand(new MFlagPointCommand());
+        event.registerServerCommand(new TpFlagCommand());
+        event.registerServerCommand(new FlagListCommand());
         MinecraftForge.EVENT_BUS.register(new BlockPlacementHandler());
+        MinecraftForge.EVENT_BUS.register(new MultiFlagBlockPlacementHandler());
+        FMLCommonHandler.instance()
+            .bus()
+            .register(new MultiFlagTimerManager());
+        FMLCommonHandler.instance()
+            .bus()
+            .register(new BlockPlacementHandler());
+        FMLCommonHandler.instance()
+            .bus()
+            .register(new FlagSyncHandler());
+
     }
 }

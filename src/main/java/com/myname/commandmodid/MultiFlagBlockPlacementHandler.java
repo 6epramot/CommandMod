@@ -8,12 +8,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class MultiFlagBlockPlacementHandler {
 
@@ -82,7 +80,8 @@ public class MultiFlagBlockPlacementHandler {
                 syncFlagsToAll();
 
                 // Отправляем сообщение игрокам в зоне
-                List<EntityPlayerMP> playersInZone = getPlayersInHemisphere(event.world, flag);
+                List<EntityPlayerMP> playersInZone = new ArrayList<>(
+                    FlagUtilities.getPlayersInHemisphere(event.world, flag, MFlagPointCommand.flagHemisphereRadius));
                 for (EntityPlayerMP player : playersInZone) {
                     CommandMod.network
                         .sendTo(new PacketPersonalMessage("Флаг " + flag.name + " был установлен!"), player);
@@ -115,8 +114,9 @@ public class MultiFlagBlockPlacementHandler {
                 // Синхронизируем флаги с клиентами
                 syncFlagsToAll();
 
-                // Собираем игроков в сферической зоне
-                List<EntityPlayerMP> playersInZone = getPlayersInHemisphere(world, flag);
+                // Собираем игроков в зоне
+                List<EntityPlayerMP> playersInZone = new ArrayList<>(
+                    FlagUtilities.getPlayersInHemisphere(world, flag, MFlagPointCommand.flagHemisphereRadius));
 
                 // Удаляем таймер и отправляем сообщение игрокам в зоне
                 MultiFlagTimerManager.stopFlagTimer(flag.name, playersInZone);
@@ -127,75 +127,6 @@ public class MultiFlagBlockPlacementHandler {
                 return;
             }
         }
-    }
-
-    // Метод для проверки, стоит ли флаг на месте (вызов из onServerTick)
-    @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-
-        // Проходим по всем флагам
-        for (MFlagPointCommand.FlagData flag : MFlagPointCommand.getAllFlags()) {
-            if (flag.flagplaced) { // Проверяем только флаги, которые установлены
-                World world = DimensionManager.getWorld(0); // Получаем мир Overworld
-                if (world == null) {
-                    System.err.println("Ошибка: мир Overworld равен null.");
-                    continue;
-                }
-
-                // Проверяем, есть ли стекло на месте флага
-                Block block = world.getBlock(flag.x, flag.y, flag.z);
-                if (block != Blocks.stained_glass) {
-                    // Если стекло отсутствует, сбрасываем флаг
-                    System.out.println(
-                        "Флаг " + flag.name
-                            + " больше не существует на координатах: "
-                            + flag.x
-                            + ", "
-                            + flag.y
-                            + ", "
-                            + flag.z);
-
-                    // Сбрасываем цвет флага и статус flagplaced
-                    MFlagPointCommand.setFlagColor(flag.name, -1);
-                    flag.flagplaced = false;
-
-                    // Синхронизируем флаги с клиентами
-                    syncFlagsToAll();
-
-                    // Собираем игроков в зоне полусферы
-                    List<EntityPlayerMP> playersInZone = getPlayersInHemisphere(world, flag);
-
-                    // Удаляем таймер и отправляем сообщение игрокам в зоне
-                    MultiFlagTimerManager.stopFlagTimer(flag.name, playersInZone);
-                    for (EntityPlayerMP player : playersInZone) {
-                        CommandMod.network
-                            .sendTo(new PacketPersonalMessage("Захват флага " + flag.name + " был прерван!"), player);
-                    }
-                }
-            }
-        }
-    }
-
-    // Метод для получения игроков в зоне полусферы
-    private List<EntityPlayerMP> getPlayersInHemisphere(World world, MFlagPointCommand.FlagData flag) {
-        List<EntityPlayerMP> playersInZone = new ArrayList<>();
-        if (world == null) {
-            System.err.println("Ошибка: мир равен null.");
-            return playersInZone;
-        }
-        for (Object obj : world.playerEntities) {
-            if (obj instanceof EntityPlayerMP) {
-                EntityPlayerMP player = (EntityPlayerMP) obj;
-                double dx = player.posX - (flag.x + 0.5);
-                double dy = player.posY - (flag.y + 0.5);
-                double dz = player.posZ - (flag.z + 0.5);
-                if (Math.sqrt(dx * dx + dy * dy + dz * dz) <= MFlagPointCommand.flagHemisphereRadius) {
-                    playersInZone.add(player);
-                }
-            }
-        }
-        return playersInZone;
     }
 
     // Метод для синхронизации флагов с клиентами

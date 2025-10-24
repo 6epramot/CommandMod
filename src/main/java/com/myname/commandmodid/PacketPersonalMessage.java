@@ -7,16 +7,20 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 
+//построение принятие и отправка пакетов для сообщений конкретному игроку
 public class PacketPersonalMessage implements IMessage {
 
     public String text = "";
 
-    public PacketPersonalMessage() {}
+    // конструктор по классике
+    public PacketPersonalMessage() {
+    }
 
     public PacketPersonalMessage(String text) {
         this.text = text != null ? text : "";
     }
 
+    // мистер сборщик
     @Override
     public void toBytes(ByteBuf buf) {
         byte[] bytes = text.getBytes(java.nio.charset.StandardCharsets.UTF_8);
@@ -24,6 +28,7 @@ public class PacketPersonalMessage implements IMessage {
         buf.writeBytes(bytes);
     }
 
+    // мистер дессириализатор
     @Override
     public void fromBytes(ByteBuf buf) {
         int len = buf.readInt();
@@ -36,18 +41,19 @@ public class PacketPersonalMessage implements IMessage {
         }
     }
 
+    // мюсье пакет менеджер
     public static class Handler implements IMessageHandler<PacketPersonalMessage, IMessage> {
 
         @Override
         public IMessage onMessage(final PacketPersonalMessage message, MessageContext ctx) {
             Minecraft.getMinecraft()
-                .func_152344_a(new Runnable() {
+                    .func_152344_a(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        TimerOverlay.addPersonalMessage(message.text);
-                    }
-                });
+                        @Override
+                        public void run() {
+                            TimerOverlay.addPersonalMessage(message.text);
+                        }
+                    });
             return null;
         }
     }

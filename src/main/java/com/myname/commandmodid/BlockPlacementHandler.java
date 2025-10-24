@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -25,10 +26,8 @@ public class BlockPlacementHandler {
 
     public static boolean flagplaced = false;
     private static final Set<Block> ALLOWED_BLOCKS = new HashSet<>(Arrays.asList(Blocks.stained_glass));
-    // дефолтный цвет белый
-    private static int flagColorIndex = 0;
+    private static int flagColorIndex = 0; // Дефолтный цвет белый
 
-    // Проверяет, совпадают ли координаты с точкой флага
     public static void setFlagColorIndex(int idx) {
         flagColorIndex = (idx >= 0 && idx < FlagColors.COLORS.length) ? idx : 0;
     }
@@ -51,9 +50,8 @@ public class BlockPlacementHandler {
 
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event) {
-        // Проверяем только если флаг был установлен
         if (flagplaced) {
-            World world = DimensionManager.getWorld(0); // 0 — обычный мир (Overworld)
+            World world = DimensionManager.getWorld(0);
             if (world != null) {
                 int x = FlagPointCommand.flagPointX;
                 int y = FlagPointCommand.flagPointY;
@@ -63,7 +61,8 @@ public class BlockPlacementHandler {
                     flagplaced = false;
                     PhaseActionBarTimer.stop();
                     CommandMod.network.sendToAll(new PacketTimerText(""));
-                    CommandMod.network.sendToAll(new PacketAnnouncement("Флаг был сброшен!"));
+                    CommandMod.network
+                        .sendToAll(new PacketAnnouncement(StatCollector.translateToLocal("message.flag.reset")));
                     CommandMod.network.sendToAll(
                         new PacketFlagBeam(
                             FlagPointCommand.flagPointX,
@@ -75,7 +74,7 @@ public class BlockPlacementHandler {
             }
         }
         if (FlagPointCommand.flagPointSet) {
-            World world = DimensionManager.getWorld(0); // 0 — Overworld
+            World world = DimensionManager.getWorld(0); // Overworld
             if (world != null) {
                 int x = FlagPointCommand.flagPointX;
                 int y = FlagPointCommand.flagPointY;
@@ -96,7 +95,6 @@ public class BlockPlacementHandler {
         int x = event.x, y = event.y, z = event.z;
         Block block = event.block;
 
-        // Проверяем только координаты и тип блока
         if (isFlagPoint(x, y, z) && ALLOWED_BLOCKS.contains(block)) {
             flagplaced = false;
             PhaseActionBarTimer.stop();
@@ -105,7 +103,8 @@ public class BlockPlacementHandler {
                 CommandMod.network.sendToAll(new PacketTimerText(""));
             }
             if (event.getPlayer() != null) {
-                CommandMod.network.sendToAll(new PacketAnnouncement("Флаг был сброшен!"));
+                CommandMod.network
+                    .sendToAll(new PacketAnnouncement(StatCollector.translateToLocal("message.flag.reset")));
                 CommandMod.network.sendToAll(
                     new PacketFlagBeam(
                         FlagPointCommand.flagPointX,
@@ -114,14 +113,12 @@ public class BlockPlacementHandler {
                         0,
                         true));
             }
-
         }
     }
 
     @SubscribeEvent
     public void onBlockPlace(PlayerInteractEvent event) {
         if (FlagPointCommand.flagPointSet && event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-            // Только на сервере!
             if (event.entityPlayer.worldObj.isRemote) return;
 
             int flagX = FlagPointCommand.flagPointX;
@@ -156,7 +153,7 @@ public class BlockPlacementHandler {
             if (placeX == flagX && placeZ == flagZ && placeY > flagY && placeY <= flagY + 20) {
                 if (event.entityPlayer instanceof EntityPlayerMP) {
                     CommandMod.network.sendTo(
-                        new PacketPersonalMessage("Над флагом нельзя строить"),
+                        new PacketPersonalMessage(StatCollector.translateToLocal("message.flag.above_block")),
                         (EntityPlayerMP) event.entityPlayer);
                 }
                 event.setCanceled(true);
@@ -167,7 +164,6 @@ public class BlockPlacementHandler {
         if (FMLCommonHandler.instance()
             .getEffectiveSide() != Side.SERVER) return;
 
-        if (event.action != Action.RIGHT_CLICK_BLOCK) return;
         EntityPlayer player = event.entityPlayer;
         int x = event.x, y = event.y, z = event.z;
         int placeX = x, placeY = y, placeZ = z;
@@ -192,14 +188,13 @@ public class BlockPlacementHandler {
                 break;
         }
 
-        // Проверяем, что ставят блок ИМЕННО на координаты флага
         if (!isFlagPoint(placeX, placeY, placeZ)) {
             return;
         }
 
         if (FlagPointCommand.preparationPhase) {
             CommandMod.network.sendTo(
-                new PacketPersonalMessage("Установка блоков запрещена во время фазы подготовки!"),
+                new PacketPersonalMessage(StatCollector.translateToLocal("message.flag.preparation_phase")),
                 (EntityPlayerMP) player);
             event.setCanceled(true);
             return;
@@ -216,9 +211,8 @@ public class BlockPlacementHandler {
             int metadata = itemStack.getItemDamage();
             CommandMod.network.sendToAll(
                 new PacketAnnouncement(
-                    FlagColors.getColorCode(metadata) + "Команда "
-                        + FlagColors.getColorName(metadata)
-                        + " поставила флаг!"));
+                    FlagColors.getColorCode(metadata) + StatCollector.translateToLocal("message.flag.set")
+                        .replace("{0}", FlagColors.getColorName(metadata))));
             CommandMod.network.sendToAll(
                 new PacketFlagBeam(
                     FlagPointCommand.flagPointX,
@@ -231,8 +225,9 @@ public class BlockPlacementHandler {
             PhaseActionBarTimer.start();
 
         } else {
-            CommandMod.network
-                .sendTo(new PacketPersonalMessage("Можно ставить только стекло!"), (EntityPlayerMP) player);
+            CommandMod.network.sendTo(
+                new PacketPersonalMessage(StatCollector.translateToLocal("message.flag.only_glass")),
+                (EntityPlayerMP) player);
             event.setCanceled(true);
         }
     }

@@ -12,7 +12,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 
 public class MFlagPointCommand extends CommandBase {
-
+    // навалил ООП
     public static class FlagData {
 
         public final String name;
@@ -45,6 +45,8 @@ public class MFlagPointCommand extends CommandBase {
     }
 
     @Override
+    // команды для мультифлага, реализовал без функций,
+    // мб потом структурирую по красоте, но сначала ланги
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 2 && args[0].equalsIgnoreCase("radius")) {
             try {
@@ -65,7 +67,7 @@ public class MFlagPointCommand extends CommandBase {
                 int newTime = Integer.parseInt(args[1]);
                 if (newTime < 1 || newTime > 3600) {
                     sender.addChatMessage(
-                        new ChatComponentText("§cВремя захвата должно быть в диапазоне 1-3600 секунд."));
+                            new ChatComponentText("§cВремя захвата должно быть в диапазоне 1-3600 секунд."));
                     return;
                 }
                 flagCaptureTime = newTime;
@@ -111,8 +113,9 @@ public class MFlagPointCommand extends CommandBase {
             flags.put(finalName, flag);
 
             sender.addChatMessage(
-                new ChatComponentText(
-                    "§aФлаг " + finalName + " установлен в " + x + " " + y + " " + z + " (цвет: " + colorIndex + ")"));
+                    new ChatComponentText(
+                            "§aФлаг " + finalName + " установлен в " + x + " " + y + " " + z + " (цвет: " + colorIndex
+                                    + ")"));
             syncFlagsToAll();
             return;
         }

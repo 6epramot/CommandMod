@@ -16,8 +16,10 @@ public class FlagUtilities {
      * @param radius Радиус полусферы.
      * @return Список игроков в зоне полусферы.
      */
+    // давно стоило в отдельный нах класс выделить
+    // функция для получения игроков в сфере вокруг флага
     public static Set<EntityPlayerMP> getPlayersInHemisphere(World world, MFlagPointCommand.FlagData flag,
-        double radius) {
+            double radius) {
         Set<EntityPlayerMP> playersInZone = new HashSet<>();
         if (world == null) {
             System.err.println("Ошибка: мир равен null.");

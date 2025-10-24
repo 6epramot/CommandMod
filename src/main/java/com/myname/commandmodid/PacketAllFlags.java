@@ -12,16 +12,20 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 
+//сетевой трафик подрубаем для майна
 public class PacketAllFlags implements IMessage {
-
+    // все флаги из списка в топку
     public List<MFlagPointCommand.FlagData> flagList = new ArrayList<MFlagPointCommand.FlagData>();
 
-    public PacketAllFlags() {}
+    // больше ооп богу ооп, конструктор для сбора всех флагов в один список
+    public PacketAllFlags() {
+    }
 
     public PacketAllFlags(Collection<MFlagPointCommand.FlagData> flags) {
         flagList.addAll(flags);
     }
 
+    // считывание пакетика и
     @Override
     public void fromBytes(ByteBuf buf) {
         int size = buf.readInt();
@@ -36,6 +40,7 @@ public class PacketAllFlags implements IMessage {
         }
     }
 
+    // сборка пакетика для отправки
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(flagList.size());
@@ -49,19 +54,20 @@ public class PacketAllFlags implements IMessage {
         }
     }
 
+    // менеджер пакетов начинает свою работу
     public static class Handler implements IMessageHandler<PacketAllFlags, IMessage> {
-
+        // всё для правильной отправки пакета
         @Override
         public IMessage onMessage(final PacketAllFlags message, MessageContext ctx) {
             Minecraft.getMinecraft()
-                .func_152344_a(new Runnable() {
+                    .func_152344_a(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        BeaconBeamHandler.clientFlags.clear();
-                        BeaconBeamHandler.clientFlags.addAll(message.flagList);
-                    }
-                });
+                        @Override
+                        public void run() {
+                            BeaconBeamHandler.clientFlags.clear();
+                            BeaconBeamHandler.clientFlags.addAll(message.flagList);
+                        }
+                    });
             return null;
         }
     }

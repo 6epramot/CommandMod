@@ -1,0 +1,52 @@
+# Общие сообщения о флагах
+message.flag.mset=Флаг {0} установлен в {1}, {2}, {3} (цвет: {4})
+message.flag.delete=Флаг {0} удалён
+message.flag.not_found=Флаг {0} не найден
+message.flag.renamed=Флаг {0} переименован в {1}
+
+# Радиус и время захвата
+message.flag.radius_set=Радиус зоны флагов установлен: {0}
+message.flag.capture_time_set=Время захвата флага установлено: {0} сек.
+message.flag.invalid_radius=Радиус должен быть в диапазоне 1-500
+message.flag.invalid_time=Время захвата должно быть в диапазоне 1-3600 секунд
+message.flag.invalid_number=Некорректное число: {0}
+
+# Сообщения о захвате
+message.flag.captured=Команда {0} захватила флаг {1}!
+message.flag.capture_interrupted=Захват флага {0} был прерван!
+
+# Таймер
+message.flag.timer=Осталось времени: {0}
+
+# BlockPlacementHandler
+message.flag.reset=Флаг был сломан!
+message.flag.above_block=Запрещено строить над флагом!
+message.flag.preparation_phase=Запрещено ставить флаг во время подготовки!
+message.flag.set={0} команда поставила флаг!
+message.flag.only_glass=Можно устанавливать только цветное стекло!
+
+# FlagColors
+message.flag.color.white=Белая
+message.flag.color.orange=Оранжевая
+message.flag.color.magenta=Пурпурная
+message.flag.color.light_blue=Голубая
+message.flag.color.yellow=Жёлтая
+message.flag.color.lime=Лаймовая
+message.flag.color.pink=Розовая
+message.flag.color.gray=Серая
+message.flag.color.light_gray=Светло-серая
+message.flag.color.cyan=Бирюзовая
+message.flag.color.purple=Фиолетовая
+message.flag.color.blue=Синяя
+message.flag.color.brown=Коричневая
+message.flag.color.green=Зелёная
+message.flag.color.red=Красная
+message.flag.color.black=Чёрная
+message.flag.color.unknown=Неизвестная
+
+# Flag List Command
+message.flag.flist.list=Список Флагов:
+message.flag.flist.nomultiflags=Нет установленных мульти-флагов
+
+# Victory Handler
+message.flag.victoryhandler.win=победа команды 

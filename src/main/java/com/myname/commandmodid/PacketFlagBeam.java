@@ -13,7 +13,8 @@ public class PacketFlagBeam implements IMessage {
     public int colorIndex;
     public boolean enabled;
 
-    public PacketFlagBeam() {}
+    public PacketFlagBeam() {
+    }
 
     public PacketFlagBeam(int x, int y, int z, int colorIndex, boolean enabled) {
         this.x = x;
@@ -23,6 +24,7 @@ public class PacketFlagBeam implements IMessage {
         this.enabled = enabled;
     }
 
+    // считывание
     @Override
     public void fromBytes(ByteBuf buf) {
         x = buf.readInt();
@@ -33,6 +35,7 @@ public class PacketFlagBeam implements IMessage {
 
     }
 
+    // сборка
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(x);
@@ -42,26 +45,27 @@ public class PacketFlagBeam implements IMessage {
         buf.writeBoolean(enabled);
     }
 
+    // менеджер пакетow
     public static class Handler implements IMessageHandler<PacketFlagBeam, IMessage> {
 
         @Override
         public IMessage onMessage(final PacketFlagBeam message, MessageContext ctx) {
             Minecraft.getMinecraft()
-                .func_152344_a(new Runnable() {
+                    .func_152344_a(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        if (message.enabled) {
-                            FlagPointCommand.flagPointX = message.x;
-                            FlagPointCommand.flagPointY = message.y;
-                            FlagPointCommand.flagPointZ = message.z;
-                            FlagPointCommand.flagPointSet = true;
-                            BlockPlacementHandler.setFlagColorIndex(message.colorIndex);
-                        } else {
-                            FlagPointCommand.flagPointSet = false;
+                        @Override
+                        public void run() {
+                            if (message.enabled) {
+                                FlagPointCommand.flagPointX = message.x;
+                                FlagPointCommand.flagPointY = message.y;
+                                FlagPointCommand.flagPointZ = message.z;
+                                FlagPointCommand.flagPointSet = true;
+                                BlockPlacementHandler.setFlagColorIndex(message.colorIndex);
+                            } else {
+                                FlagPointCommand.flagPointSet = false;
+                            }
                         }
-                    }
-                });
+                    });
             return null;
         }
     }

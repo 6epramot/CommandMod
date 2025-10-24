@@ -5,6 +5,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 
+//отдельный класс для телепортации к мулти-флагам, чё нет то
 public class TpFlagCommand extends CommandBase {
 
     @Override
@@ -17,6 +18,7 @@ public class TpFlagCommand extends CommandBase {
         return "/tpflag <flag_name>";
     }
 
+    // сама команда и её исполнение
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length != 1) {

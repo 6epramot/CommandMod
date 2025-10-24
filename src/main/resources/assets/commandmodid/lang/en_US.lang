@@ -1,0 +1,49 @@
+# General flag messages
+message.flag.set=Flag {0} has been set at {1}, {2}, {3} (color: {4})
+message.flag.delete=Flag {0} has been deleted
+message.flag.not_found=Flag {0} not found
+message.flag.renamed=Flag {0} has been renamed to {1}
+
+# Radius and capture time
+message.flag.radius_set=Flag radius set to {0}
+message.flag.capture_time_set=Flag capture time set to {0} seconds
+message.flag.invalid_radius=Radius must be between 1 and 500
+message.flag.invalid_time=Capture time must be between 1 and 3600 seconds
+message.flag.invalid_number=Invalid number: {0}
+
+# Capture messages
+message.flag.captured=The {0} team has captured the flag {1}!
+message.flag.capture_interrupted=Capture of flag {0} has been interrupted!
+
+# Timer
+message.flag.timer=Time left: {0}
+
+# BlockPlacementHandler
+message.flag.reset=The flag has been reset!
+message.flag.above_block=You cannot build above the flag!
+message.flag.preparation_phase=You cannot place blocks during the preparation phase!
+message.flag.set=The {0} team has placed the flag!
+message.flag.only_glass=You can only place stained glass!
+
+# FlagColors
+message.flag.color.white=White
+message.flag.color.orange=Orange
+message.flag.color.magenta=Magenta
+message.flag.color.light_blue=Light Blue
+message.flag.color.yellow=Yellow
+message.flag.color.lime=Lime
+message.flag.color.pink=Pink
+message.flag.color.gray=Gray
+message.flag.color.light_gray=Light Gray
+message.flag.color.cyan=Cyan
+message.flag.color.purple=Purple
+message.flag.color.blue=Blue
+message.flag.color.brown=Brown
+message.flag.color.green=Green
+message.flag.color.red=Red
+message.flag.color.black=Black
+message.flag.color.unknown=Unknown
+
+# Flag List Command
+message.flag.flist.list=Flag List:
+message.flag.flist.nomultiflags=no installed multi-flags

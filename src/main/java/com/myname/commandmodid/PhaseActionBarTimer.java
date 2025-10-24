@@ -32,9 +32,10 @@ public class PhaseActionBarTimer {
             return;
         }
 
-        // Запускаем только на сервере!
+        // Запускаем только на серваке
         if (FMLCommonHandler.instance()
-            .getEffectiveSide() != Side.SERVER) return;
+                .getEffectiveSide() != Side.SERVER)
+            return;
 
         final String phaseNameFinal = phaseName;
         final int[] secondsLeft = { totalSeconds };
@@ -54,7 +55,7 @@ public class PhaseActionBarTimer {
                     }
                     // Отправляем пустой таймер для очистки у всех клиентов
                     if (!MinecraftServer.getServer()
-                        .getConfigurationManager().playerEntityList.isEmpty()) {
+                            .getConfigurationManager().playerEntityList.isEmpty()) {
                         CommandMod.network.sendToAll(new PacketTimerText(""));
                     }
                     return;
@@ -62,7 +63,7 @@ public class PhaseActionBarTimer {
 
                 // Отправляем обновление таймера всем клиентам
                 if (!MinecraftServer.getServer()
-                    .getConfigurationManager().playerEntityList.isEmpty()) {
+                        .getConfigurationManager().playerEntityList.isEmpty()) {
                     String text = phaseNameFinal + ": " + formatTime(secondsLeft[0]);
                     CommandMod.network.sendToAll(new PacketTimerText(text));
                 }

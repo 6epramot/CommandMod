@@ -42,10 +42,10 @@ public class TimerOverlay {
             GL11.glScalef(2.0F, 2.0F, 2.0F);
             int timerWidth = mc.fontRenderer.getStringWidth(timerText);
             mc.fontRenderer.drawStringWithShadow(
-                timerText,
-                (int) ((width / 2 - timerWidth / 2) / 2.0F),
-                (int) (10 / 2.0F),
-                0xFFFF55);
+                    timerText,
+                    (int) ((width / 2 - timerWidth / 2) / 2.0F),
+                    (int) (10 / 2.0F),
+                    0xFFFF55);
             GL11.glPopMatrix();
         }
 
@@ -58,7 +58,8 @@ public class TimerOverlay {
             GL11.glScalef(1.5F, 1.5F, 1.5F);
             int timerWidth = mc.fontRenderer.getStringWidth(text);
             mc.fontRenderer
-                .drawStringWithShadow(text, (int) ((width / 2 - timerWidth / 2) / 1.5F), (int) (y / 1.5F), 0x55FF55);
+                    .drawStringWithShadow(text, (int) ((width / 2 - timerWidth / 2) / 1.5F), (int) (y / 1.5F),
+                            0x55FF55);
             GL11.glPopMatrix();
             y += 24;
         }
@@ -70,10 +71,10 @@ public class TimerOverlay {
                 GL11.glScalef(2.0F, 2.0F, 2.0F);
                 int msgWidth = mc.fontRenderer.getStringWidth(lastAnnouncement);
                 mc.fontRenderer.drawStringWithShadow(
-                    lastAnnouncement,
-                    (int) ((width / 2 - msgWidth / 2) / 2.0F),
-                    (int) (40 / 2.0F),
-                    0xFFFFFF);
+                        lastAnnouncement,
+                        (int) ((width / 2 - msgWidth / 2) / 2.0F),
+                        (int) (40 / 2.0F),
+                        0xFFFFFF);
                 GL11.glPopMatrix();
             } else {
                 announcements.clear();
@@ -87,7 +88,8 @@ public class TimerOverlay {
             if (now - personalMessageTimestamp < PERSONAL_DURATION) {
                 for (String msg : personalMessages) {
                     mc.fontRenderer
-                        .drawStringWithShadow(msg, width / 2 - mc.fontRenderer.getStringWidth(msg) / 2, msgY, 0xFFFFFF);
+                            .drawStringWithShadow(msg, width / 2 - mc.fontRenderer.getStringWidth(msg) / 2, msgY,
+                                    0xFFFFFF);
                     msgY += 12;
                 }
             } else {
@@ -105,7 +107,8 @@ public class TimerOverlay {
 
     // Добавить личное сообщение (только на клиенте)
     public static void addPersonalMessage(String msg) {
-        if (personalMessages.size() > 3) personalMessages.poll();
+        if (personalMessages.size() > 3)
+            personalMessages.poll();
         personalMessages.offer(msg);
         personalMessageTimestamp = System.currentTimeMillis();
     }

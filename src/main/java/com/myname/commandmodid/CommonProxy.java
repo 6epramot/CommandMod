@@ -14,15 +14,20 @@ public class CommonProxy {
         CommandMod.LOG.info("I am CommandMod at version " + Tags.VERSION);
     }
 
-    public void init(FMLInitializationEvent event) {}
+    public void init(FMLInitializationEvent event) {
+    }
 
-    public void postInit(FMLPostInitializationEvent event) {}
+    public void postInit(FMLPostInitializationEvent event) {
+    }
 
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new MFlagPointCommand());
         event.registerServerCommand(new TpFlagCommand());
     }
 
+    // Метод для регистрации сетевых обработчиков но при этом у меня это происходит
+    // в основном классе,
+    // хз стоит ли убирать, чё то тестить не время
     public void registerNetworkHandlers() {
         CommandMod.network.registerMessage(PacketTimerText.Handler.class, PacketTimerText.class, 0, Side.CLIENT);
         CommandMod.network.registerMessage(PacketAnnouncement.Handler.class, PacketAnnouncement.class, 1, Side.CLIENT);

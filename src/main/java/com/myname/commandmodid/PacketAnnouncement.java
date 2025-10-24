@@ -7,16 +7,19 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 
+//сетевые пакеты для глобальных сообщений всем игрокам
 public class PacketAnnouncement implements IMessage {
 
     public String text = "";
 
-    public PacketAnnouncement() {}
+    public PacketAnnouncement() {
+    }
 
     public PacketAnnouncement(String text) {
         this.text = text != null ? text : "";
     }
 
+    // сборка
     @Override
     public void toBytes(ByteBuf buf) {
         byte[] bytes = text.getBytes(java.nio.charset.StandardCharsets.UTF_8);
@@ -24,6 +27,7 @@ public class PacketAnnouncement implements IMessage {
         buf.writeBytes(bytes);
     }
 
+    // считывание
     @Override
     public void fromBytes(ByteBuf buf) {
         int len = buf.readInt();
@@ -36,18 +40,19 @@ public class PacketAnnouncement implements IMessage {
         }
     }
 
+    // менеджер пакетов
     public static class Handler implements IMessageHandler<PacketAnnouncement, IMessage> {
 
         @Override
         public IMessage onMessage(final PacketAnnouncement message, MessageContext ctx) {
             Minecraft.getMinecraft()
-                .func_152344_a(new Runnable() {
+                    .func_152344_a(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        TimerOverlay.addAnnouncement(message.text);
-                    }
-                });
+                        @Override
+                        public void run() {
+                            TimerOverlay.addAnnouncement(message.text);
+                        }
+                    });
             return null;
         }
     }

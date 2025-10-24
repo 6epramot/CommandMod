@@ -15,7 +15,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class MultiFlagTimerManager {
-
+    // таймер для мулти-флага, тяжело..
     private static class FlagTimer {
 
         Timer timer;
@@ -27,14 +27,16 @@ public class MultiFlagTimerManager {
 
     private static final Map<String, FlagTimer> flagTimers = new HashMap<>();
 
+    // функция для задания начала таймера
     public static void startFlagTimer(final String flagName, final int seconds,
             final List<EntityPlayerMP> initialPlayers, final int colorIndex) {
+        // чтобы без наслаиваний больше
         stopFlagTimer(flagName, initialPlayers);
-
+        // таймер показывается конкретного флага
         final MFlagPointCommand.FlagData flagData = getFlagData(flagName);
         if (flagData == null)
             return;
-
+        // ооп больше ооп(создаю конструктор таймера флага)
         final FlagTimer flagTimer = new FlagTimer();
         flagTimer.timeLeft = seconds;
         flagTimer.flagName = flagName;
@@ -46,7 +48,7 @@ public class MultiFlagTimerManager {
                 colorIndex,
                 flagData.flagplaced);
         flagTimers.put(flagName, flagTimer);
-
+        // Создание нового таймера и его активация у конкретного флага
         flagTimer.timer = new Timer();
         flagTimer.timer.scheduleAtFixedRate(new TimerTask() {
 
@@ -69,6 +71,7 @@ public class MultiFlagTimerManager {
         }, 0, 1000);
     }
 
+    // функция сброса таймера
     public static void stopFlagTimer(String flagName, final List<EntityPlayerMP> initialPlayers) {
         FlagTimer flagTimer = flagTimers.remove(flagName);
         if (flagTimer != null && flagTimer.timer != null) {
@@ -88,7 +91,7 @@ public class MultiFlagTimerManager {
             return;
         for (FlagTimer flagTimer : flagTimers.values()) {
             Set<EntityPlayerMP> currentPlayers = FlagUtilities.getPlayersInHemisphere(
-                    DimensionManager.getWorld(0),
+                    DimensionManager.getWorld(0), // пока всё работает только для верхнего мира
                     flagTimer.flagData,
                     MFlagPointCommand.flagHemisphereRadius);
             // Показывает таймер игрокам вошедшим в зону
@@ -123,6 +126,7 @@ public class MultiFlagTimerManager {
         }
     }
 
+    // удобная функция для сбора даты из класса с командами
     private static MFlagPointCommand.FlagData getFlagData(String flagName) {
         for (MFlagPointCommand.FlagData flag : MFlagPointCommand.getAllFlags()) {
             if (flag.name.equals(flagName))
@@ -131,6 +135,7 @@ public class MultiFlagTimerManager {
         return null;
     }
 
+    // преоброзование по формату
     private static String formatTime(int totalSeconds) {
         int min = totalSeconds / 60;
         int sec = totalSeconds % 60;

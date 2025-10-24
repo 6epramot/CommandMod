@@ -17,6 +17,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 
+//Основной класс мода где регистрируем всё в сети и для правльной работы и обработки форджа
 @Mod(modid = CommandMod.MODID, version = Tags.VERSION, name = "CommandMod", acceptedMinecraftVersions = "[1.7.10]")
 public class CommandMod {
 
@@ -33,7 +34,7 @@ public class CommandMod {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-
+        // по порядочку главное расписывать пакетики
         proxy.init(event);
         network.registerMessage(PacketTimerText.Handler.class, PacketTimerText.class, 0, Side.CLIENT);
         network.registerMessage(PacketAnnouncement.Handler.class, PacketAnnouncement.class, 1, Side.CLIENT);
@@ -48,6 +49,7 @@ public class CommandMod {
         proxy.postInit(event);
     }
 
+    // если сервак есть то ивентики вот так вот надо
     @EventHandler
     public void serverLoad(FMLServerStartingEvent event) {
         event.registerServerCommand(new FlagPointCommand());
@@ -57,14 +59,14 @@ public class CommandMod {
         MinecraftForge.EVENT_BUS.register(new BlockPlacementHandler());
         MinecraftForge.EVENT_BUS.register(new MultiFlagBlockPlacementHandler());
         FMLCommonHandler.instance()
-            .bus()
-            .register(new MultiFlagTimerManager());
+                .bus()
+                .register(new MultiFlagTimerManager());
         FMLCommonHandler.instance()
-            .bus()
-            .register(new BlockPlacementHandler());
+                .bus()
+                .register(new BlockPlacementHandler());
         FMLCommonHandler.instance()
-            .bus()
-            .register(new FlagSyncHandler());
+                .bus()
+                .register(new FlagSyncHandler());
 
     }
 }

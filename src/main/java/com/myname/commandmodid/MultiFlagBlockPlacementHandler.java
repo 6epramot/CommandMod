@@ -18,11 +18,14 @@ public class MultiFlagBlockPlacementHandler {
     // Обработчик установки блока
     @SubscribeEvent
     public void onBlockPlace(PlayerInteractEvent event) {
-        if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
-        if (event.entityPlayer.worldObj.isRemote) return;
+        if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
+            return;
+        if (event.entityPlayer.worldObj.isRemote)
+            return;
 
         ItemStack itemStack = event.entityPlayer.getCurrentEquippedItem();
-        if (itemStack == null) return;
+        if (itemStack == null)
+            return;
 
         Block block = Block.getBlockFromItem(itemStack.getItem());
         int x = event.x, y = event.y, z = event.z;
@@ -57,8 +60,8 @@ public class MultiFlagBlockPlacementHandler {
                 if (block != Blocks.stained_glass) {
                     if (event.entityPlayer instanceof EntityPlayerMP) {
                         CommandMod.network.sendTo(
-                            new PacketPersonalMessage("На месте флага можно ставить только цветное стекло!"),
-                            (EntityPlayerMP) event.entityPlayer);
+                                new PacketPersonalMessage("На месте флага можно ставить только цветное стекло!"),
+                                (EntityPlayerMP) event.entityPlayer);
                     }
                     event.setCanceled(true);
                     return;
@@ -81,15 +84,16 @@ public class MultiFlagBlockPlacementHandler {
 
                 // Отправляем сообщение игрокам в зоне
                 List<EntityPlayerMP> playersInZone = new ArrayList<>(
-                    FlagUtilities.getPlayersInHemisphere(event.world, flag, MFlagPointCommand.flagHemisphereRadius));
+                        FlagUtilities.getPlayersInHemisphere(event.world, flag,
+                                MFlagPointCommand.flagHemisphereRadius));
                 for (EntityPlayerMP player : playersInZone) {
                     CommandMod.network
-                        .sendTo(new PacketPersonalMessage("Флаг " + flag.name + " был установлен!"), player);
+                            .sendTo(new PacketPersonalMessage("Флаг " + flag.name + " был установлен!"), player);
                 }
 
                 // Запускаем таймер захвата
                 MultiFlagTimerManager
-                    .startFlagTimer(flag.name, MFlagPointCommand.flagCaptureTime, playersInZone, colorMeta);
+                        .startFlagTimer(flag.name, MFlagPointCommand.flagCaptureTime, playersInZone, colorMeta);
                 return;
             }
         }
@@ -99,7 +103,8 @@ public class MultiFlagBlockPlacementHandler {
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
         World world = event.world;
-        if (world.isRemote) return;
+        if (world.isRemote)
+            return;
 
         int x = event.x, y = event.y, z = event.z;
 
@@ -116,13 +121,13 @@ public class MultiFlagBlockPlacementHandler {
 
                 // Собираем игроков в зоне
                 List<EntityPlayerMP> playersInZone = new ArrayList<>(
-                    FlagUtilities.getPlayersInHemisphere(world, flag, MFlagPointCommand.flagHemisphereRadius));
+                        FlagUtilities.getPlayersInHemisphere(world, flag, MFlagPointCommand.flagHemisphereRadius));
 
                 // Удаляем таймер и отправляем сообщение игрокам в зоне
                 MultiFlagTimerManager.stopFlagTimer(flag.name, playersInZone);
                 for (EntityPlayerMP player : playersInZone) {
                     CommandMod.network
-                        .sendTo(new PacketPersonalMessage("Захват флага " + flag.name + " был прерван!"), player);
+                            .sendTo(new PacketPersonalMessage("Захват флага " + flag.name + " был прерван!"), player);
                 }
                 return;
             }

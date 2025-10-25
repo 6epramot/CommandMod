@@ -21,8 +21,8 @@ public class FlagVictoryHandler {
             String colorName = FlagColors.getColorName(meta);
             String colorCode = FlagColors.getColorCode(meta);
             CommandMod.network.sendToAll(
-                    new PacketAnnouncement(
-                            colorCode + StatCollector.translateToLocal("message.flag.victoryhandler.win") + colorName));
+                new PacketAnnouncement(
+                    colorCode + StatCollector.translateToLocal("message.flag.victoryhandler.win") + colorName));
         }
     }
 

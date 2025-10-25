@@ -28,12 +28,12 @@ public class BeaconBeamHandler {
         // Одиночный флаг
         if (FlagPointCommand.flagPointSet) {
             drawBeam(
-                    FlagPointCommand.flagPointX + 0.5 - px,
-                    FlagPointCommand.flagPointY - py,
-                    FlagPointCommand.flagPointZ + 0.5 - pz,
-                    BlockPlacementHandler.getFlagR(),
-                    BlockPlacementHandler.getFlagG(),
-                    BlockPlacementHandler.getFlagB());
+                FlagPointCommand.flagPointX + 0.5 - px,
+                FlagPointCommand.flagPointY - py,
+                FlagPointCommand.flagPointZ + 0.5 - pz,
+                BlockPlacementHandler.getFlagR(),
+                BlockPlacementHandler.getFlagG(),
+                BlockPlacementHandler.getFlagB());
         }
 
         // Мульти-флаги

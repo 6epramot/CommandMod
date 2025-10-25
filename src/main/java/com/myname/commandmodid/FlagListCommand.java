@@ -5,7 +5,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 
-//отдельно выделил команду для листа, заебало в один класс всё пихать
+// отдельно выделил команду для листа, заебало в один класс всё пихать
 // надо нахуй для всего блять по отдельному классу, зря ООП чтоле:р
 public class FlagListCommand extends CommandBase {
 
@@ -22,9 +22,9 @@ public class FlagListCommand extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (MFlagPointCommand.getAllFlags()
-                .isEmpty()) {
+            .isEmpty()) {
             sender.addChatMessage(
-                    new ChatComponentText(StatCollector.translateToLocal("message.flag.flist.nomultiflags")));
+                new ChatComponentText(StatCollector.translateToLocal("message.flag.flist.nomultiflags")));
             return;
         }
         sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("message.flag.flist.list")));

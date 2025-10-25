@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 
-//отдельный класс для телепортации к мулти-флагам, чё нет то
+// отдельный класс для телепортации к мулти-флагам, чё нет то
 public class TpFlagCommand extends CommandBase {
 
     @Override
@@ -28,8 +28,10 @@ public class TpFlagCommand extends CommandBase {
         if (sender instanceof EntityPlayerMP) {
             boolean ok = MFlagPointCommand.teleportToFlag((EntityPlayerMP) sender, args[0]);
             if (!ok) {
-                sender.addChatMessage(new ChatComponentText(StatCollector
-                        .translateToLocal("message.flag.tpcommand.flag_not_found").replace("{0}", args[0])));
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.tpcommand.flag_not_found")
+                            .replace("{0}", args[0])));
             }
         }
     }

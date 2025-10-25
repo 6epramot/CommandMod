@@ -9,8 +9,8 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
-//класс команд для соло-флага
-//надо будет как-нибудь добавить возможность удалять его
+// класс команд для соло-флага
+// надо будет как-нибудь добавить возможность удалять его
 public class FlagPointCommand extends CommandBase {
 
     public static int flagHoldTimeMinutes = 5;
@@ -41,8 +41,7 @@ public class FlagPointCommand extends CommandBase {
     // обработчик доп команд, нужно будет сделать так чтобы на таб выдавал варианты
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-        if (args.length == 0)
-            throw new WrongUsageException(getCommandUsage(sender));
+        if (args.length == 0) throw new WrongUsageException(getCommandUsage(sender));
 
         if ("time".equalsIgnoreCase(args[0])) {
             handleTimeCommand(sender, args);
@@ -72,13 +71,13 @@ public class FlagPointCommand extends CommandBase {
             flagPointSet = true;
             CommandMod.network.sendToAll(new PacketFlagBeam(flagPointX, flagPointY, flagPointZ, 0, true));
             sender.addChatMessage(
-                    new ChatComponentText(
-                            EnumChatFormatting.GREEN + "Flag point set to: "
-                                    + flagPointX
-                                    + ", "
-                                    + flagPointY
-                                    + ", "
-                                    + flagPointZ));
+                new ChatComponentText(
+                    EnumChatFormatting.GREEN + "Flag point set to: "
+                        + flagPointX
+                        + ", "
+                        + flagPointY
+                        + ", "
+                        + flagPointZ));
 
         } catch (NumberFormatException e) {
             throw new WrongUsageException("commands.generic.num.invalid", args[0]);
@@ -87,26 +86,24 @@ public class FlagPointCommand extends CommandBase {
 
     // фукнция для установки времени удержания флага
     private void handleTimeCommand(ICommandSender sender, String[] args) throws CommandException {
-        if (args.length != 3)
-            throw new WrongUsageException("commands.flagpoint.time.usage");
+        if (args.length != 3) throw new WrongUsageException("commands.flagpoint.time.usage");
         int min = parseAndValidateTime(sender, args[1], args[2], "commands.flagpoint.time.invalid");
         flagHoldTimeMinutes = min;
         flagHoldTimeSeconds = Integer.parseInt(args[2]);
         sender.addChatMessage(
-                new ChatComponentText(
-                        EnumChatFormatting.GREEN + "Flag hold time set to: "
-                                + flagHoldTimeMinutes
-                                + " minutes "
-                                + flagHoldTimeSeconds
-                                + " seconds"));
+            new ChatComponentText(
+                EnumChatFormatting.GREEN + "Flag hold time set to: "
+                    + flagHoldTimeMinutes
+                    + " minutes "
+                    + flagHoldTimeSeconds
+                    + " seconds"));
 
     }
 
     // функция для установки времени подготовки перед установкой флага, надо будет
     // объединить с мультифлагом или там дублировать хз
     public void handlePrepareCommand(ICommandSender sender, String[] args) throws CommandException {
-        if (args.length != 3)
-            throw new WrongUsageException("commands.flagpoint.prepare.usage");
+        if (args.length != 3) throw new WrongUsageException("commands.flagpoint.prepare.usage");
         int min = parseAndValidateTime(sender, args[1], args[2], "commands.flagpoint.prepare.invalid");
         preparationTimeMinutes = min;
         preparationTimeSeconds = Integer.parseInt(args[2]);
@@ -114,18 +111,18 @@ public class FlagPointCommand extends CommandBase {
 
         PhaseActionBarTimer.start();
         sender.addChatMessage(
-                new ChatComponentText(
-                        EnumChatFormatting.GREEN + "Preparation time set to: "
-                                + preparationTimeMinutes
-                                + " minutes "
-                                + preparationTimeSeconds
-                                + " seconds"));
+            new ChatComponentText(
+                EnumChatFormatting.GREEN + "Preparation time set to: "
+                    + preparationTimeMinutes
+                    + " minutes "
+                    + preparationTimeSeconds
+                    + " seconds"));
     }
 
     // простая функция для преоброзования тиков в секунды и минуты с проверкой на
     // валидность
     private int parseAndValidateTime(ICommandSender sender, String minArg, String secArg, String errorKey)
-            throws CommandException {
+        throws CommandException {
         int min, sec;
         try {
             min = parseInt(sender, minArg);

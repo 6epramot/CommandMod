@@ -16,6 +16,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class MultiFlagTimerManager {
+
     // таймер для мулти-флага, тяжело..
     private static class FlagTimer {
 
@@ -30,24 +31,23 @@ public class MultiFlagTimerManager {
 
     // функция для задания начала таймера
     public static void startFlagTimer(final String flagName, final int seconds,
-            final List<EntityPlayerMP> initialPlayers, final int colorIndex) {
+        final List<EntityPlayerMP> initialPlayers, final int colorIndex) {
         // чтобы без наслаиваний больше
         stopFlagTimer(flagName, initialPlayers);
         // таймер показывается конкретного флага
         final MFlagPointCommand.FlagData flagData = getFlagData(flagName);
-        if (flagData == null)
-            return;
+        if (flagData == null) return;
         // ооп больше ооп(создаю конструктор таймера флага)
         final FlagTimer flagTimer = new FlagTimer();
         flagTimer.timeLeft = seconds;
         flagTimer.flagName = flagName;
         flagTimer.flagData = new MFlagPointCommand.FlagData(
-                flagData.name,
-                flagData.x,
-                flagData.y,
-                flagData.z,
-                colorIndex,
-                flagData.flagplaced);
+            flagData.name,
+            flagData.x,
+            flagData.y,
+            flagData.z,
+            colorIndex,
+            flagData.flagplaced);
         flagTimers.put(flagName, flagTimer);
         // Создание нового таймера и его активация у конкретного флага
         flagTimer.timer = new Timer();
@@ -60,12 +60,13 @@ public class MultiFlagTimerManager {
                     String colorCode = FlagColors.getColorCode(colorIndex);
                     String colorName = FlagColors.getColorName(colorIndex);
                     CommandMod.network.sendToAll(
-                            new PacketAnnouncement(colorCode + colorName
-                                    + StatCollector.translateToLocal("message.flag.mtimer.flag_has_been_captured")
-                                            .replace("{0}", flagName)));
+                        new PacketAnnouncement(
+                            colorCode + colorName
+                                + StatCollector.translateToLocal("message.flag.mtimer.flag_has_been_captured")
+                                    .replace("{0}", flagName)));
                     for (EntityPlayerMP player : flagTimer.playersWithTimer) {
                         CommandMod.network
-                                .sendTo(new PacketMultiFlagTimer(flagName, "", flagTimer.flagData.colorIndex), player);
+                            .sendTo(new PacketMultiFlagTimer(flagName, "", flagTimer.flagData.colorIndex), player);
                     }
                     return;
                 }
@@ -82,7 +83,7 @@ public class MultiFlagTimerManager {
             // Сбросить таймер только игрокам в зоне
             for (EntityPlayerMP player : initialPlayers) {
                 CommandMod.network
-                        .sendTo(new PacketMultiFlagTimer(flagName, "", flagTimer.flagData.colorIndex), player);
+                    .sendTo(new PacketMultiFlagTimer(flagName, "", flagTimer.flagData.colorIndex), player);
             }
         }
     }
@@ -90,41 +91,40 @@ public class MultiFlagTimerManager {
     // Вызывать на сервере раз в тик
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END)
-            return;
+        if (event.phase != TickEvent.Phase.END) return;
         for (FlagTimer flagTimer : flagTimers.values()) {
             Set<EntityPlayerMP> currentPlayers = FlagUtilities.getPlayersInHemisphere(
-                    DimensionManager.getWorld(0), // пока всё работает только для верхнего мира
-                    flagTimer.flagData,
-                    MFlagPointCommand.flagHemisphereRadius);
+                DimensionManager.getWorld(0), // пока всё работает только для верхнего мира
+                flagTimer.flagData,
+                MFlagPointCommand.flagHemisphereRadius);
             // Показывает таймер игрокам вошедшим в зону
             for (EntityPlayerMP player : currentPlayers) {
                 if (!flagTimer.playersWithTimer.contains(player)) {
                     CommandMod.network.sendTo(
-                            new PacketMultiFlagTimer(
-                                    flagTimer.flagName,
-                                    formatTime(flagTimer.timeLeft),
-                                    flagTimer.flagData.colorIndex),
-                            player);
+                        new PacketMultiFlagTimer(
+                            flagTimer.flagName,
+                            formatTime(flagTimer.timeLeft),
+                            flagTimer.flagData.colorIndex),
+                        player);
                 }
             }
             // Убирает таймер вышедшем игрокам
             for (EntityPlayerMP player : new HashSet<>(flagTimer.playersWithTimer)) {
                 if (!currentPlayers.contains(player)) {
                     CommandMod.network.sendTo(
-                            new PacketMultiFlagTimer(flagTimer.flagName, "", flagTimer.flagData.colorIndex),
-                            player);
+                        new PacketMultiFlagTimer(flagTimer.flagName, "", flagTimer.flagData.colorIndex),
+                        player);
                 }
             }
             flagTimer.playersWithTimer = currentPlayers;
             // Обновить таймер всем, кто остался
             for (EntityPlayerMP player : flagTimer.playersWithTimer) {
                 CommandMod.network.sendTo(
-                        new PacketMultiFlagTimer(
-                                flagTimer.flagName,
-                                formatTime(flagTimer.timeLeft),
-                                flagTimer.flagData.colorIndex),
-                        player);
+                    new PacketMultiFlagTimer(
+                        flagTimer.flagName,
+                        formatTime(flagTimer.timeLeft),
+                        flagTimer.flagData.colorIndex),
+                    player);
             }
         }
     }
@@ -132,8 +132,7 @@ public class MultiFlagTimerManager {
     // удобная функция для сбора даты из класса с командами
     private static MFlagPointCommand.FlagData getFlagData(String flagName) {
         for (MFlagPointCommand.FlagData flag : MFlagPointCommand.getAllFlags()) {
-            if (flag.name.equals(flagName))
-                return flag;
+            if (flag.name.equals(flagName)) return flag;
         }
         return null;
     }

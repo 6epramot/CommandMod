@@ -14,11 +14,9 @@ public class CommonProxy {
         CommandMod.LOG.info("I am CommandMod at version " + Tags.VERSION);
     }
 
-    public void init(FMLInitializationEvent event) {
-    }
+    public void init(FMLInitializationEvent event) {}
 
-    public void postInit(FMLPostInitializationEvent event) {
-    }
+    public void postInit(FMLPostInitializationEvent event) {}
 
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new MFlagPointCommand());

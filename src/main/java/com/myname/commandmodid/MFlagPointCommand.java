@@ -13,6 +13,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 
 public class MFlagPointCommand extends CommandBase {
+
     // навалил ООП
     public static class FlagData {
 
@@ -54,16 +55,19 @@ public class MFlagPointCommand extends CommandBase {
                 double newRadius = Double.parseDouble(args[1]);
                 if (newRadius < 1.0 || newRadius > 500.0) {
                     sender.addChatMessage(
-                            new ChatComponentText(StatCollector.translateToLocal("message.flag.mflag.invalid_radius")));
+                        new ChatComponentText(StatCollector.translateToLocal("message.flag.mflag.invalid_radius")));
                     return;
                 }
                 flagHemisphereRadius = newRadius;
-                sender.addChatMessage(new ChatComponentText(
-                        StatCollector.translateToLocal("message.flag.mflag.radius_added").replace("{0}",
-                                Double.toString(newRadius))));
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.mflag.radius_added")
+                            .replace("{0}", Double.toString(newRadius))));
             } catch (NumberFormatException e) {
-                sender.addChatMessage(new ChatComponentText(
-                        StatCollector.translateToLocal("message.flag.invalid_number").replace("{0}", args[1])));
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.invalid_number")
+                            .replace("{0}", args[1])));
             }
             return;
         }
@@ -72,14 +76,20 @@ public class MFlagPointCommand extends CommandBase {
                 int newTime = Integer.parseInt(args[1]);
                 if (newTime < 1 || newTime > 3600) {
                     sender.addChatMessage(
-                            new ChatComponentText("§cВремя захвата должно быть в диапазоне 1-3600 секунд."));
+                        new ChatComponentText(
+                            StatCollector.translateToLocal("message.flag.mflag.invalid_capture_time")));
                     return;
                 }
                 flagCaptureTime = newTime;
-                sender.addChatMessage(new ChatComponentText("§aВремя захвата флага установлено: " + newTime + " сек."));
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.mflag.invalid_capture_time")
+                            .replace("{0}", Integer.toString(newTime))));
             } catch (NumberFormatException e) {
-                sender.addChatMessage(new ChatComponentText(
-                        StatCollector.translateToLocal("message.flag.invalid_number").replace("{0}", args[1])));
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.invalid_number")
+                            .replace("{0}", args[1])));
             }
             return;
         }
@@ -119,10 +129,13 @@ public class MFlagPointCommand extends CommandBase {
             flags.put(finalName, flag);
 
             sender.addChatMessage(
-                    new ChatComponentText(StatCollector.translateToLocal("message.flag.mflag.admin_message_set")
-                            .replace("{0}", finalName).replace("{1}", Integer.toString(x))
-                            .replace("{2}", Integer.toString(y)).replace("{3}", Integer.toString(z))
-                            .replace("{4}", Integer.toString(colorIndex))));
+                new ChatComponentText(
+                    StatCollector.translateToLocal("message.flag.mflag.admin_message_set")
+                        .replace("{0}", finalName)
+                        .replace("{1}", Integer.toString(x))
+                        .replace("{2}", Integer.toString(y))
+                        .replace("{3}", Integer.toString(z))
+                        .replace("{4}", Integer.toString(colorIndex))));
             syncFlagsToAll();
             return;
         }
@@ -132,12 +145,16 @@ public class MFlagPointCommand extends CommandBase {
             String name = args[0];
             FlagData removed = flags.remove(name);
             if (removed != null) {
-                sender.addChatMessage(new ChatComponentText(
-                        StatCollector.translateToLocal("message.flag.mflag.delete").replace("{0}", name)));
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.mflag.delete")
+                            .replace("{0}", name)));
                 syncFlagsToAll();
             } else {
-                sender.addChatMessage(new ChatComponentText(
-                        StatCollector.translateToLocal("message.flag.mflag.not_found").replace("{0}", name)));
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.mflag.not_found")
+                            .replace("{0}", name)));
             }
             return;
         }
@@ -147,20 +164,27 @@ public class MFlagPointCommand extends CommandBase {
             String oldName = args[0];
             String newName = args[1];
             if (!flags.containsKey(oldName)) {
-                sender.addChatMessage(new ChatComponentText(
-                        StatCollector.translateToLocal("message.flag.mflag.not_found").replace("{0}", oldName)));
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.mflag.not_found")
+                            .replace("{0}", oldName)));
                 return;
             }
             if (flags.containsKey(newName)) {
-                sender.addChatMessage(new ChatComponentText(
-                        StatCollector.translateToLocal("message.flag.mflag.already_existed").replace("{0}", newName)));
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.mflag.already_existed")
+                            .replace("{0}", newName)));
                 return;
             }
             FlagData data = flags.remove(oldName);
             FlagData renamed = new FlagData(newName, data.x, data.y, data.z, data.colorIndex, data.flagplaced);
             flags.put(newName, renamed);
-            sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("message.flag.mflag.renamed")
-                    .replace("{0}", oldName).replace("{0}", newName)));
+            sender.addChatMessage(
+                new ChatComponentText(
+                    StatCollector.translateToLocal("message.flag.mflag.renamed")
+                        .replace("{0}", oldName)
+                        .replace("{0}", newName)));
             syncFlagsToAll();
             return;
         }

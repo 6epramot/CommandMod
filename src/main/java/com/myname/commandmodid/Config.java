@@ -4,7 +4,7 @@ import java.io.File;
 
 import net.minecraftforge.common.config.Configuration;
 
-//я хз нах этот класс мне нужен но пусть будет
+// я хз нах этот класс мне нужен но пусть будет
 public class Config {
 
     public static String greeting = "Hello World";

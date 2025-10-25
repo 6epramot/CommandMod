@@ -5,6 +5,7 @@ import java.util.TimerTask;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.StatCollector;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -34,8 +35,7 @@ public class PhaseActionBarTimer {
 
         // Запускаем только на серваке
         if (FMLCommonHandler.instance()
-                .getEffectiveSide() != Side.SERVER)
-            return;
+            .getEffectiveSide() != Side.SERVER) return;
 
         final String phaseNameFinal = phaseName;
         final int[] secondsLeft = { totalSeconds };
@@ -49,14 +49,15 @@ public class PhaseActionBarTimer {
                     stop();
                     if (FlagPointCommand.preparationPhase) {
                         FlagPointCommand.preparationPhase = false;
-                        CommandMod.network.sendToAll(new PacketAnnouncement(
+                        CommandMod.network.sendToAll(
+                            new PacketAnnouncement(
                                 StatCollector.translateToLocal("message.flag.bartimer.prepare_end")));
                     } else {
                         FlagVictoryHandler.checkVictory();
                     }
                     // Отправляем пустой таймер для очистки у всех клиентов
                     if (!MinecraftServer.getServer()
-                            .getConfigurationManager().playerEntityList.isEmpty()) {
+                        .getConfigurationManager().playerEntityList.isEmpty()) {
                         CommandMod.network.sendToAll(new PacketTimerText(""));
                     }
                     return;
@@ -64,7 +65,7 @@ public class PhaseActionBarTimer {
 
                 // Отправляем обновление таймера всем клиентам
                 if (!MinecraftServer.getServer()
-                        .getConfigurationManager().playerEntityList.isEmpty()) {
+                    .getConfigurationManager().playerEntityList.isEmpty()) {
                     String text = phaseNameFinal + ": " + formatTime(secondsLeft[0]);
                     CommandMod.network.sendToAll(new PacketTimerText(text));
                 }

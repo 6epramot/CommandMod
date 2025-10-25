@@ -7,13 +7,12 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 
-//сетевые пакеты для глобальных сообщений всем игрокам
+// сетевые пакеты для глобальных сообщений всем игрокам
 public class PacketAnnouncement implements IMessage {
 
     public String text = "";
 
-    public PacketAnnouncement() {
-    }
+    public PacketAnnouncement() {}
 
     public PacketAnnouncement(String text) {
         this.text = text != null ? text : "";
@@ -46,13 +45,13 @@ public class PacketAnnouncement implements IMessage {
         @Override
         public IMessage onMessage(final PacketAnnouncement message, MessageContext ctx) {
             Minecraft.getMinecraft()
-                    .func_152344_a(new Runnable() {
+                .func_152344_a(new Runnable() {
 
-                        @Override
-                        public void run() {
-                            TimerOverlay.addAnnouncement(message.text);
-                        }
-                    });
+                    @Override
+                    public void run() {
+                        TimerOverlay.addAnnouncement(message.text);
+                    }
+                });
             return null;
         }
     }

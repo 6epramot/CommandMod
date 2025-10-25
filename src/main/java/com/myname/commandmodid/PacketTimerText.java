@@ -7,13 +7,12 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 
-//Пакеты для отоброжения таймера
+// Пакеты для отоброжения таймера
 public class PacketTimerText implements IMessage {
 
     public String text = "";
 
-    public PacketTimerText() {
-    }
+    public PacketTimerText() {}
 
     public PacketTimerText(String text) {
         this.text = text != null ? text : "";
@@ -47,13 +46,13 @@ public class PacketTimerText implements IMessage {
         public IMessage onMessage(final PacketTimerText message, MessageContext ctx) {
             // func_152344_a это старое название метода для выполнения на клиенте
             Minecraft.getMinecraft()
-                    .func_152344_a(new Runnable() {
+                .func_152344_a(new Runnable() {
 
-                        @Override
-                        public void run() {
-                            com.myname.commandmodid.TimerOverlay.timerText = message.text;
-                        }
-                    });
+                    @Override
+                    public void run() {
+                        com.myname.commandmodid.TimerOverlay.timerText = message.text;
+                    }
+                });
             return null;
         }
     }

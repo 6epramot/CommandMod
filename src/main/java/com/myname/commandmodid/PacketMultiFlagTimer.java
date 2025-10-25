@@ -15,8 +15,7 @@ public class PacketMultiFlagTimer implements IMessage {
     private int colorMeta; // Цвет флага
 
     // Конструктор по умолчанию(как же сеть любит ооп)
-    public PacketMultiFlagTimer() {
-    }
+    public PacketMultiFlagTimer() {}
 
     // Конструктор с аргументами
     public PacketMultiFlagTimer(String flagName, String timerText, int colorMeta) {
@@ -48,14 +47,14 @@ public class PacketMultiFlagTimer implements IMessage {
         public IMessage onMessage(final PacketMultiFlagTimer message, MessageContext ctx) {
             // Выполняем обработку пакета на клиенте
             Minecraft.getMinecraft()
-                    .func_152344_a(new Runnable() {
+                .func_152344_a(new Runnable() {
 
-                        @Override
-                        public void run() {
-                            // Устанавливаем таймер для флага на клиенте
-                            TimerOverlay.setMultiFlagTimer(message.flagName, message.timerText);
-                        }
-                    });
+                    @Override
+                    public void run() {
+                        // Устанавливаем таймер для флага на клиенте
+                        TimerOverlay.setMultiFlagTimer(message.flagName, message.timerText);
+                    }
+                });
             return null; // Ответный пакет не требуется
         }
     }

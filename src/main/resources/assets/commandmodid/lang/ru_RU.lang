@@ -1,31 +1,11 @@
-# Общие сообщения о флагах
-message.flag.mset=Флаг {0} установлен в {1}, {2}, {3} (цвет: {4})
-message.flag.delete=Флаг {0} удалён
-message.flag.not_found=Флаг {0} не найден
-message.flag.renamed=Флаг {0} переименован в {1}
-
-# Радиус и время захвата
-message.flag.radius_set=Радиус зоны флагов установлен: {0}
-message.flag.capture_time_set=Время захвата флага установлено: {0} сек.
-message.flag.invalid_radius=Радиус должен быть в диапазоне 1-500
-message.flag.invalid_time=Время захвата должно быть в диапазоне 1-3600 секунд
-message.flag.invalid_number=Некорректное число: {0}
-
-# Сообщения о захвате
-message.flag.captured=Команда {0} захватила флаг {1}!
-message.flag.capture_interrupted=Захват флага {0} был прерван!
-
-# Таймер
-message.flag.timer=Осталось времени: {0}
-
-# BlockPlacementHandler
+# BLOCK-PLACEMENT-HANDLER
 message.flag.reset=Флаг был сломан!
 message.flag.above_block=Запрещено строить над флагом!
 message.flag.preparation_phase=Запрещено ставить флаг во время подготовки!
 message.flag.set={0} команда поставила флаг!
 message.flag.only_glass=Можно устанавливать только цветное стекло!
 
-# FlagColors
+# FLAG-COLORS
 message.flag.color.white=Белая
 message.flag.color.orange=Оранжевая
 message.flag.color.magenta=Пурпурная
@@ -44,9 +24,48 @@ message.flag.color.red=Красная
 message.flag.color.black=Чёрная
 message.flag.color.unknown=Неизвестная
 
-# Flag List Command
+# FLAG-LIST-COMMAND
 message.flag.flist.list=Список Флагов:
 message.flag.flist.nomultiflags=Нет установленных мульти-флагов
 
-# Victory Handler
-message.flag.victoryhandler.win=победа команды 
+# VICTORY-HANDLER
+message.flag.victoryhandler.win=Победа команды 
+
+# MFLAG-POINT-COMMAND
+
+#raius
+message.flag.mflag.invalid_radius=Радиус должен быть в диапазоне 1-500.
+message.flag.mflag.radius_added=Радиус зоны флагов установлен: {0}
+
+#capturetime
+message.flag.mflag.invalid_capture_time=Время захвата должно быть в диапазоне 1-3600 секунд.
+message.flag.mflag.capture_time_added=Время захвата флага установлено: {0}
+
+#invalid_number_universal
+message.flag.invalid_number=Некорректное число: {0}
+
+#admin_messages
+message.flag.mflag.admin_message_set=Флаг {0} установлен в {1}, {2}, {3} (цвет: {4})
+message.flag.mflag.delete=Флаг {0} удалён
+message.flag.mflag.not_found=Флаг {0} не найден
+message.flag.mflag.already_existing=Флаг с именем {0} уже существует
+message.flag.mflag.renamed=Флаг {0} переименован в {1}
+
+#MULTI-FLAG-BLOCK-PLACEMENT-HANDLER
+message.flag.mfBPH.invalid_block_on_point=На месте флага можно ставить только цветное стекло!
+message.flag.mfBPH.invalid_color=Некорректный цвет стекла: {0}!
+message.flag.admin_message_fplaced=Установка флага: {0} на координаты: {1}, {2}, {3}.
+message.flag.mflag.flag_has_been_placed=Флаг {0} был установлен!
+message.flag.admin_message_fdeleted=Флаг {0} был разрушен на координатах: {1}, {2}, {3}. 
+message.flag.mflag.flag_has_been_destroyed=Захват флага {0} был прерван!
+
+# MFLAG-TIMER-MANAGER
+message.flag.mtimer.flag_has_been_captured=команда захватила {0}!
+
+# PHASE-ACTION-BAR-TIMER
+message.flag.bartimer.prepare_end=Подготовка окончена!
+message.flag.bartimer.name_prepare=Подготовка!
+message.flag.bartimer.name_capture_flag=Захват флага!
+
+# TP-FLAG-COMMAND
+message.flag.tpcommand.flag_not_found=Флаг {0} не найден

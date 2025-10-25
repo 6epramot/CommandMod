@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -60,7 +61,8 @@ public class MultiFlagBlockPlacementHandler {
                 if (block != Blocks.stained_glass) {
                     if (event.entityPlayer instanceof EntityPlayerMP) {
                         CommandMod.network.sendTo(
-                                new PacketPersonalMessage("На месте флага можно ставить только цветное стекло!"),
+                                new PacketPersonalMessage(
+                                        StatCollector.translateToLocal("message.flag.mfBPH.invalid_block_on_point")),
                                 (EntityPlayerMP) event.entityPlayer);
                     }
                     event.setCanceled(true);
@@ -69,13 +71,16 @@ public class MultiFlagBlockPlacementHandler {
 
                 // Проверяем корректность цвета
                 if (colorMeta < 0 || colorMeta > 15) {
-                    System.err.println("Ошибка: некорректный цвет стекла: " + colorMeta);
+                    System.err.println(StatCollector.translateToLocal("message.flag.mfBPH.invalid_color")
+                            .replace("{0}", Integer.toString(colorMeta)));
                     event.setCanceled(true);
                     return;
                 }
 
                 // Обновляем цвет флага и статус flagplaced
-                System.out.println("Установка флага: " + flag.name + " на координаты: " + x + ", " + y + ", " + z);
+                System.out.println(StatCollector.translateToLocal("message.flag.admin_message_fplaced")
+                        .replace("{0}", flag.name).replace("{1}", Integer.toString(x))
+                        .replace("{2}", Integer.toString(y)).replace("{3}", Integer.toString(z)));
                 MFlagPointCommand.setFlagColor(flag.name, colorMeta);
                 flag.flagplaced = true;
 
@@ -88,7 +93,10 @@ public class MultiFlagBlockPlacementHandler {
                                 MFlagPointCommand.flagHemisphereRadius));
                 for (EntityPlayerMP player : playersInZone) {
                     CommandMod.network
-                            .sendTo(new PacketPersonalMessage("Флаг " + flag.name + " был установлен!"), player);
+                            .sendTo(new PacketPersonalMessage(
+                                    StatCollector.translateToLocal("message.flag.mflag.flag_has_been_placed")
+                                            .replace("{0}", flag.name)),
+                                    player);
                 }
 
                 // Запускаем таймер захвата
@@ -112,7 +120,9 @@ public class MultiFlagBlockPlacementHandler {
             // Проверяем, совпадают ли координаты с флагом
             if (flag.x == x && flag.y == y && flag.z == z) {
                 // Сбрасываем цвет флага и статус flagplaced
-                System.out.println("Флаг " + flag.name + " был разрушен на координатах: " + x + ", " + y + ", " + z);
+                System.out.println(StatCollector.translateToLocal("message.flag.admin_message_fdeleted")
+                        .replace("{0}", flag.name).replace("{1}", Integer.toString(x))
+                        .replace("{2}", Integer.toString(y)).replace("{3}", Integer.toString(z)));
                 MFlagPointCommand.setFlagColor(flag.name, -1);
                 flag.flagplaced = false;
 
@@ -127,7 +137,10 @@ public class MultiFlagBlockPlacementHandler {
                 MultiFlagTimerManager.stopFlagTimer(flag.name, playersInZone);
                 for (EntityPlayerMP player : playersInZone) {
                     CommandMod.network
-                            .sendTo(new PacketPersonalMessage("Захват флага " + flag.name + " был прерван!"), player);
+                            .sendTo(new PacketPersonalMessage(
+                                    StatCollector.translateToLocal("message.flag.mflag.flag_has_been_destroyed")
+                                            .replace("{0}", flag.name)),
+                                    player);
                 }
                 return;
             }

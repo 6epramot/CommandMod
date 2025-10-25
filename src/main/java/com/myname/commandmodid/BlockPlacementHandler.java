@@ -22,6 +22,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 
+// Обработчик установки и удаления блоков соло-флага,
+//в принципе можно сделать с помощью абстрактного класса для обоих обработчиков
 public class BlockPlacementHandler {
 
     public static boolean flagplaced = false;
@@ -62,14 +64,14 @@ public class BlockPlacementHandler {
                     PhaseActionBarTimer.stop();
                     CommandMod.network.sendToAll(new PacketTimerText(""));
                     CommandMod.network
-                        .sendToAll(new PacketAnnouncement(StatCollector.translateToLocal("message.flag.reset")));
+                            .sendToAll(new PacketAnnouncement(StatCollector.translateToLocal("message.flag.reset")));
                     CommandMod.network.sendToAll(
-                        new PacketFlagBeam(
-                            FlagPointCommand.flagPointX,
-                            FlagPointCommand.flagPointY,
-                            FlagPointCommand.flagPointZ,
-                            0,
-                            true));
+                            new PacketFlagBeam(
+                                    FlagPointCommand.flagPointX,
+                                    FlagPointCommand.flagPointY,
+                                    FlagPointCommand.flagPointZ,
+                                    0,
+                                    true));
                 }
             }
         }
@@ -99,19 +101,19 @@ public class BlockPlacementHandler {
             flagplaced = false;
             PhaseActionBarTimer.stop();
             if (FMLCommonHandler.instance()
-                .getEffectiveSide() == Side.SERVER) {
+                    .getEffectiveSide() == Side.SERVER) {
                 CommandMod.network.sendToAll(new PacketTimerText(""));
             }
             if (event.getPlayer() != null) {
                 CommandMod.network
-                    .sendToAll(new PacketAnnouncement(StatCollector.translateToLocal("message.flag.reset")));
+                        .sendToAll(new PacketAnnouncement(StatCollector.translateToLocal("message.flag.reset")));
                 CommandMod.network.sendToAll(
-                    new PacketFlagBeam(
-                        FlagPointCommand.flagPointX,
-                        FlagPointCommand.flagPointY,
-                        FlagPointCommand.flagPointZ,
-                        0,
-                        true));
+                        new PacketFlagBeam(
+                                FlagPointCommand.flagPointX,
+                                FlagPointCommand.flagPointY,
+                                FlagPointCommand.flagPointZ,
+                                0,
+                                true));
             }
         }
     }
@@ -119,7 +121,8 @@ public class BlockPlacementHandler {
     @SubscribeEvent
     public void onBlockPlace(PlayerInteractEvent event) {
         if (FlagPointCommand.flagPointSet && event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-            if (event.entityPlayer.worldObj.isRemote) return;
+            if (event.entityPlayer.worldObj.isRemote)
+                return;
 
             int flagX = FlagPointCommand.flagPointX;
             int flagY = FlagPointCommand.flagPointY;
@@ -153,16 +156,18 @@ public class BlockPlacementHandler {
             if (placeX == flagX && placeZ == flagZ && placeY > flagY && placeY <= flagY + 20) {
                 if (event.entityPlayer instanceof EntityPlayerMP) {
                     CommandMod.network.sendTo(
-                        new PacketPersonalMessage(StatCollector.translateToLocal("message.flag.above_block")),
-                        (EntityPlayerMP) event.entityPlayer);
+                            new PacketPersonalMessage(StatCollector.translateToLocal("message.flag.above_block")),
+                            (EntityPlayerMP) event.entityPlayer);
                 }
                 event.setCanceled(true);
             }
         }
 
-        if (event.action != Action.RIGHT_CLICK_BLOCK) return;
+        if (event.action != Action.RIGHT_CLICK_BLOCK)
+            return;
         if (FMLCommonHandler.instance()
-            .getEffectiveSide() != Side.SERVER) return;
+                .getEffectiveSide() != Side.SERVER)
+            return;
 
         EntityPlayer player = event.entityPlayer;
         int x = event.x, y = event.y, z = event.z;
@@ -194,8 +199,8 @@ public class BlockPlacementHandler {
 
         if (FlagPointCommand.preparationPhase) {
             CommandMod.network.sendTo(
-                new PacketPersonalMessage(StatCollector.translateToLocal("message.flag.preparation_phase")),
-                (EntityPlayerMP) player);
+                    new PacketPersonalMessage(StatCollector.translateToLocal("message.flag.preparation_phase")),
+                    (EntityPlayerMP) player);
             event.setCanceled(true);
             return;
         }
@@ -210,24 +215,24 @@ public class BlockPlacementHandler {
         if (ALLOWED_BLOCKS.contains(block)) {
             int metadata = itemStack.getItemDamage();
             CommandMod.network.sendToAll(
-                new PacketAnnouncement(
-                    FlagColors.getColorCode(metadata) + StatCollector.translateToLocal("message.flag.set")
-                        .replace("{0}", FlagColors.getColorName(metadata))));
+                    new PacketAnnouncement(
+                            FlagColors.getColorCode(metadata) + StatCollector.translateToLocal("message.flag.set")
+                                    .replace("{0}", FlagColors.getColorName(metadata))));
             CommandMod.network.sendToAll(
-                new PacketFlagBeam(
-                    FlagPointCommand.flagPointX,
-                    FlagPointCommand.flagPointY,
-                    FlagPointCommand.flagPointZ,
-                    metadata,
-                    true));
+                    new PacketFlagBeam(
+                            FlagPointCommand.flagPointX,
+                            FlagPointCommand.flagPointY,
+                            FlagPointCommand.flagPointZ,
+                            metadata,
+                            true));
             flagplaced = true;
             setFlagColorIndex(metadata);
             PhaseActionBarTimer.start();
 
         } else {
             CommandMod.network.sendTo(
-                new PacketPersonalMessage(StatCollector.translateToLocal("message.flag.only_glass")),
-                (EntityPlayerMP) player);
+                    new PacketPersonalMessage(StatCollector.translateToLocal("message.flag.only_glass")),
+                    (EntityPlayerMP) player);
             event.setCanceled(true);
         }
     }

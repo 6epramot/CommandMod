@@ -9,6 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.DimensionManager;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -59,7 +60,9 @@ public class MultiFlagTimerManager {
                     String colorCode = FlagColors.getColorCode(colorIndex);
                     String colorName = FlagColors.getColorName(colorIndex);
                     CommandMod.network.sendToAll(
-                            new PacketAnnouncement(colorCode + colorName + " команда захватила " + flagName + "!"));
+                            new PacketAnnouncement(colorCode + colorName
+                                    + StatCollector.translateToLocal("message.flag.mtimer.flag_has_been_captured")
+                                            .replace("{0}", flagName)));
                     for (EntityPlayerMP player : flagTimer.playersWithTimer) {
                         CommandMod.network
                                 .sendTo(new PacketMultiFlagTimer(flagName, "", flagTimer.flagData.colorIndex), player);

@@ -4,7 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import net.minecraft.server.MinecraftServer;
-
+import net.minecraft.util.StatCollector;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -24,10 +24,10 @@ public class PhaseActionBarTimer {
 
         if (FlagPointCommand.preparationPhase) {
             totalSeconds = FlagPointCommand.preparationTimeMinutes * 60 + FlagPointCommand.preparationTimeSeconds;
-            phaseName = "Подготовка";
+            phaseName = StatCollector.translateToLocal("message.flag.bartimer.name_prepare");
         } else if (FlagPointCommand.isFlagPointSet()) {
             totalSeconds = FlagPointCommand.flagHoldTimeMinutes * 60 + FlagPointCommand.flagHoldTimeSeconds;
-            phaseName = "Захват флага";
+            phaseName = StatCollector.translateToLocal("message.flag.bartimer.name_capture_flag");
         } else {
             return;
         }
@@ -49,7 +49,8 @@ public class PhaseActionBarTimer {
                     stop();
                     if (FlagPointCommand.preparationPhase) {
                         FlagPointCommand.preparationPhase = false;
-                        CommandMod.network.sendToAll(new PacketAnnouncement("Подготовка окончена"));
+                        CommandMod.network.sendToAll(new PacketAnnouncement(
+                                StatCollector.translateToLocal("message.flag.bartimer.prepare_end")));
                     } else {
                         FlagVictoryHandler.checkVictory();
                     }

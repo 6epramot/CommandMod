@@ -10,6 +10,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.StatCollector;
 
 public class MFlagPointCommand extends CommandBase {
     // навалил ООП
@@ -52,13 +53,17 @@ public class MFlagPointCommand extends CommandBase {
             try {
                 double newRadius = Double.parseDouble(args[1]);
                 if (newRadius < 1.0 || newRadius > 500.0) {
-                    sender.addChatMessage(new ChatComponentText("§cРадиус должен быть в диапазоне 1-500."));
+                    sender.addChatMessage(
+                            new ChatComponentText(StatCollector.translateToLocal("message.flag.mflag.invalid_radius")));
                     return;
                 }
                 flagHemisphereRadius = newRadius;
-                sender.addChatMessage(new ChatComponentText("§aРадиус зоны флагов установлен: " + newRadius));
+                sender.addChatMessage(new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.mflag.radius_added").replace("{0}",
+                                Double.toString(newRadius))));
             } catch (NumberFormatException e) {
-                sender.addChatMessage(new ChatComponentText("§cНекорректное число: " + args[1]));
+                sender.addChatMessage(new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.invalid_number").replace("{0}", args[1])));
             }
             return;
         }
@@ -73,7 +78,8 @@ public class MFlagPointCommand extends CommandBase {
                 flagCaptureTime = newTime;
                 sender.addChatMessage(new ChatComponentText("§aВремя захвата флага установлено: " + newTime + " сек."));
             } catch (NumberFormatException e) {
-                sender.addChatMessage(new ChatComponentText("§cНекорректное число: " + args[1]));
+                sender.addChatMessage(new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.invalid_number").replace("{0}", args[1])));
             }
             return;
         }
@@ -113,9 +119,10 @@ public class MFlagPointCommand extends CommandBase {
             flags.put(finalName, flag);
 
             sender.addChatMessage(
-                    new ChatComponentText(
-                            "§aФлаг " + finalName + " установлен в " + x + " " + y + " " + z + " (цвет: " + colorIndex
-                                    + ")"));
+                    new ChatComponentText(StatCollector.translateToLocal("message.flag.mflag.admin_message_set")
+                            .replace("{0}", finalName).replace("{1}", Integer.toString(x))
+                            .replace("{2}", Integer.toString(y)).replace("{3}", Integer.toString(z))
+                            .replace("{4}", Integer.toString(colorIndex))));
             syncFlagsToAll();
             return;
         }
@@ -125,10 +132,12 @@ public class MFlagPointCommand extends CommandBase {
             String name = args[0];
             FlagData removed = flags.remove(name);
             if (removed != null) {
-                sender.addChatMessage(new ChatComponentText("§cФлаг " + name + " удалён"));
+                sender.addChatMessage(new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.mflag.delete").replace("{0}", name)));
                 syncFlagsToAll();
             } else {
-                sender.addChatMessage(new ChatComponentText("§cФлаг " + name + " не найден"));
+                sender.addChatMessage(new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.mflag.not_found").replace("{0}", name)));
             }
             return;
         }
@@ -138,17 +147,20 @@ public class MFlagPointCommand extends CommandBase {
             String oldName = args[0];
             String newName = args[1];
             if (!flags.containsKey(oldName)) {
-                sender.addChatMessage(new ChatComponentText("§cФлаг " + oldName + " не найден"));
+                sender.addChatMessage(new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.mflag.not_found").replace("{0}", oldName)));
                 return;
             }
             if (flags.containsKey(newName)) {
-                sender.addChatMessage(new ChatComponentText("§cФлаг с именем " + newName + " уже существует"));
+                sender.addChatMessage(new ChatComponentText(
+                        StatCollector.translateToLocal("message.flag.mflag.already_existed").replace("{0}", newName)));
                 return;
             }
             FlagData data = flags.remove(oldName);
             FlagData renamed = new FlagData(newName, data.x, data.y, data.z, data.colorIndex, data.flagplaced);
             flags.put(newName, renamed);
-            sender.addChatMessage(new ChatComponentText("§aФлаг " + oldName + " переименован в " + newName));
+            sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("message.flag.mflag.renamed")
+                    .replace("{0}", oldName).replace("{0}", newName)));
             syncFlagsToAll();
             return;
         }
@@ -156,7 +168,7 @@ public class MFlagPointCommand extends CommandBase {
         throw new WrongUsageException(getCommandUsage(sender));
     }
 
-    // Для телепортации к флагу
+    // функция для телепортации к флагу
     public static boolean teleportToFlag(EntityPlayerMP player, String flagName) {
         FlagData data = flags.get(flagName);
         if (data != null) {

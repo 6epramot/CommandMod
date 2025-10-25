@@ -16,6 +16,7 @@ public class BeaconBeamHandler {
     // Список мультифлагов
     public static final List<MFlagPointCommand.FlagData> clientFlags = new ArrayList<MFlagPointCommand.FlagData>();
 
+    // Метод для отрисовки лучей в мире для всех установленных флагов
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
@@ -27,12 +28,12 @@ public class BeaconBeamHandler {
         // Одиночный флаг
         if (FlagPointCommand.flagPointSet) {
             drawBeam(
-                FlagPointCommand.flagPointX + 0.5 - px,
-                FlagPointCommand.flagPointY - py,
-                FlagPointCommand.flagPointZ + 0.5 - pz,
-                BlockPlacementHandler.getFlagR(),
-                BlockPlacementHandler.getFlagG(),
-                BlockPlacementHandler.getFlagB());
+                    FlagPointCommand.flagPointX + 0.5 - px,
+                    FlagPointCommand.flagPointY - py,
+                    FlagPointCommand.flagPointZ + 0.5 - pz,
+                    BlockPlacementHandler.getFlagR(),
+                    BlockPlacementHandler.getFlagG(),
+                    BlockPlacementHandler.getFlagB());
         }
 
         // Мульти-флаги
@@ -42,7 +43,8 @@ public class BeaconBeamHandler {
         }
     }
 
-    // Универсальный метод для отрисовки луча
+    // Универсальный метод для отрисовки луча, принимает координаты и цвет и
+    // используем опенгаель функции для рисования
     private void drawBeam(double x, double y, double z, float r, float g, float b) {
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -53,7 +55,7 @@ public class BeaconBeamHandler {
         int segments = 32;
         double radius = 0.3;
         double height = 75.0;
-
+        // Рисуем цилиндрический луч с моим радиусом и высотой
         GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
         for (int i = 0; i <= segments; i++) {
             double angle = 2 * Math.PI * i / segments;
@@ -63,9 +65,10 @@ public class BeaconBeamHandler {
             GL11.glVertex3d(x + dx, y + height, z + dz);
         }
         GL11.glEnd();
-
+        // Несколько методов для правильной работы луча в OpenGL
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopMatrix();
+
     }
 }

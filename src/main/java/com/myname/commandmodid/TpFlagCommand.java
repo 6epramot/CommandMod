@@ -4,6 +4,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.StatCollector;
 
 //отдельный класс для телепортации к мулти-флагам, чё нет то
 public class TpFlagCommand extends CommandBase {
@@ -27,7 +28,8 @@ public class TpFlagCommand extends CommandBase {
         if (sender instanceof EntityPlayerMP) {
             boolean ok = MFlagPointCommand.teleportToFlag((EntityPlayerMP) sender, args[0]);
             if (!ok) {
-                sender.addChatMessage(new ChatComponentText("§cФлаг " + args[0] + " не найден"));
+                sender.addChatMessage(new ChatComponentText(StatCollector
+                        .translateToLocal("message.flag.tpcommand.flag_not_found").replace("{0}", args[0])));
             }
         }
     }

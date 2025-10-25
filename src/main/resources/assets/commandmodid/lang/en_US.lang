@@ -1,31 +1,11 @@
-# General flag messages
-message.flag.set=Flag {0} has been set at {1}, {2}, {3} (color: {4})
-message.flag.delete=Flag {0} has been deleted
-message.flag.not_found=Flag {0} not found
-message.flag.renamed=Flag {0} has been renamed to {1}
-
-# Radius and capture time
-message.flag.radius_set=Flag radius set to {0}
-message.flag.capture_time_set=Flag capture time set to {0} seconds
-message.flag.invalid_radius=Radius must be between 1 and 500
-message.flag.invalid_time=Capture time must be between 1 and 3600 seconds
-message.flag.invalid_number=Invalid number: {0}
-
-# Capture messages
-message.flag.captured=The {0} team has captured the flag {1}!
-message.flag.capture_interrupted=Capture of flag {0} has been interrupted!
-
-# Timer
-message.flag.timer=Time left: {0}
-
-# BlockPlacementHandler
+# BLOCK-PLACEMENT-HANDLER
 message.flag.reset=The flag has been reset!
 message.flag.above_block=You cannot build above the flag!
 message.flag.preparation_phase=You cannot place blocks during the preparation phase!
 message.flag.set=The {0} team has placed the flag!
 message.flag.only_glass=You can only place stained glass!
 
-# FlagColors
+# FLAG-COLORS
 message.flag.color.white=White
 message.flag.color.orange=Orange
 message.flag.color.magenta=Magenta
@@ -44,6 +24,47 @@ message.flag.color.red=Red
 message.flag.color.black=Black
 message.flag.color.unknown=Unknown
 
-# Flag List Command
+# FLAG-LIST-COMMAND
 message.flag.flist.list=Flag List:
 message.flag.flist.nomultiflags=no installed multi-flags
+# VICTORY-HANDLER
+message.flag.victoryhandler.win=Team victory
+
+# MFLAG-POINT-COMMAND
+
+#raius
+message.flag.mflag.invalid_radius=The radius must be in the range 1-500.
+message.flag.mflag.radius_added=The radius of the flag zone is set: {0}
+
+#capturetime
+message.flag.mflag.invalid_capture_time=The capture time must be in the range of 1-3600 seconds.
+message.flag.mflag.capture_time_added=Capture the flag time is set: {0}
+
+#invalid_number_universal
+message.flag.invalid_number=Incorrect number: {0}
+
+#admin_messages
+message.flag.mflag.admin_message_set=Flag {0} is set to {1}, {2}, {3} (color: {4})
+message.flag.mflag.delete=Flag {0} removed
+message.flag.mflag.not_found=Flag {0} not found
+message.flag.mflag.already_existing=A flag with the name {0} already exists.
+message.flag.mflag.renamed=Flag {0} renamed to {1}
+
+#MULTI-FLAG-BLOCK-PLACEMENT-HANDLER
+message.flag.mfBPH.invalid_block_on_point=Only colored glass can be placed in place of the flag!
+message.flag.mfBPH.invalid_color=Invalid glass color: {0}!
+message.flag.admin_message_fplaced=Setting flag: {0} to coordinates: {1}, {2}, {3}.
+message.flag.mflag.flag_has_been_placed=Flag {0} has been set!
+message.flag.admin_message_fdeleted=Flag {0} was destroyed at coordinates: {1}, {2}, {3}.
+message.flag.mflag.flag_has_been_destroyed=Capture of flag {0} has been interrupted!
+
+# MFLAG-TIMER-MANAGER
+message.flag.mtimer.flag_has_been_captured=The team captured {0}!
+
+# PHASE-ACTION-BAR-TIMER
+message.flag.bartimer.prepare_end=Preparation is complete!
+message.flag.bartimer.name_prepare=Preparation!
+message.flag.bartimer.name_capture_flag=Capture the flag!
+
+# TP-FLAG-COMMAND
+message.flag.tpcommand.flag_not_found=Flag {0} not found

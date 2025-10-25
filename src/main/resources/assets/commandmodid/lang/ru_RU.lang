@@ -69,3 +69,9 @@ message.flag.bartimer.name_capture_flag=Захват флага!
 
 # TP-FLAG-COMMAND
 message.flag.tpcommand.flag_not_found=Флаг {0} не найден
+
+# FLAG-UTILITIES
+message.flag.util.world_null=Ошибка: мир равен null.
+
+# TIMER-OVERLAY
+message.flag.timer_overlay.active_timer_string=Флаг {0}: 

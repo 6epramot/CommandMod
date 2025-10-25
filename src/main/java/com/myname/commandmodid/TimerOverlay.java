@@ -7,6 +7,7 @@ import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import org.lwjgl.opengl.GL11;
@@ -53,7 +54,8 @@ public class TimerOverlay {
         for (Map.Entry<String, String> entry : multiFlagTimers.entrySet()) {
             String flagName = entry.getKey();
             String timer = entry.getValue();
-            String text = "Флаг " + flagName + ": " + timer;
+            String text = StatCollector.translateToLocal("message.flag.timer_overlay.active_timer_string")
+                .replace("{0}", flagName) + timer;
             GL11.glPushMatrix();
             GL11.glScalef(1.5F, 1.5F, 1.5F);
             int timerWidth = mc.fontRenderer.getStringWidth(text);

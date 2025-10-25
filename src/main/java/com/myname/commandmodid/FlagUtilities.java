@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class FlagUtilities {
@@ -22,7 +23,7 @@ public class FlagUtilities {
         double radius) {
         Set<EntityPlayerMP> playersInZone = new HashSet<>();
         if (world == null) {
-            System.err.println("Ошибка: мир равен null.");
+            System.err.println(StatCollector.translateToLocal("message.flag.util.world_null"));
             return playersInZone;
         }
         for (Object obj : world.playerEntities) {

@@ -1,4 +1,4 @@
-package com.myname.commandmodid;
+package com.myname.commandmodid.soloFlag;
 
 import java.util.List;
 
@@ -8,6 +8,10 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+
+import com.myname.commandmodid.CommandMod;
+import com.myname.commandmodid.packets.PacketFlagBeam;
+import com.myname.commandmodid.timers.PhaseActionBarTimer;
 
 // класс команд для соло-флага
 // надо будет как-нибудь добавить возможность удалять его

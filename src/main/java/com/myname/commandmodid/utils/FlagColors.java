@@ -1,4 +1,4 @@
-package com.myname.commandmodid;
+package com.myname.commandmodid.utils;
 
 import net.minecraft.util.StatCollector;
 

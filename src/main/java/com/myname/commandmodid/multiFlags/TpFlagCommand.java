@@ -1,4 +1,4 @@
-package com.myname.commandmodid;
+package com.myname.commandmodid.multiFlags;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;

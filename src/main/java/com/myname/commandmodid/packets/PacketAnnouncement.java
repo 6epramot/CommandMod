@@ -1,6 +1,8 @@
-package com.myname.commandmodid;
+package com.myname.commandmodid.packets;
 
 import net.minecraft.client.Minecraft;
+
+import com.myname.commandmodid.timers.TimerOverlay;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;

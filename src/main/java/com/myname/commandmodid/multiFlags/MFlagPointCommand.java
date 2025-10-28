@@ -1,4 +1,4 @@
-package com.myname.commandmodid;
+package com.myname.commandmodid.multiFlags;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,6 +11,9 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
+
+import com.myname.commandmodid.CommandMod;
+import com.myname.commandmodid.packets.PacketAllFlags;
 
 public class MFlagPointCommand extends CommandBase {
 

@@ -1,6 +1,13 @@
-package com.myname.commandmodid;
+package com.myname.commandmodid.utils;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+
+import com.myname.commandmodid.CommandMod;
+import com.myname.commandmodid.multiFlags.MFlagPointCommand;
+import com.myname.commandmodid.packets.PacketAllFlags;
+import com.myname.commandmodid.packets.PacketFlagBeam;
+import com.myname.commandmodid.soloFlag.BlockPlacementHandler;
+import com.myname.commandmodid.soloFlag.FlagPointCommand;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;

@@ -2,6 +2,9 @@ package com.myname.commandmodid;
 
 import net.minecraftforge.common.MinecraftForge;
 
+import com.myname.commandmodid.timers.TimerOverlay;
+import com.myname.commandmodid.utils.BeaconBeamHandler;
+
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 
 public class ClientProxy extends CommonProxy {

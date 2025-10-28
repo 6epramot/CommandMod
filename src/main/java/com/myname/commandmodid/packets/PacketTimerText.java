@@ -1,4 +1,4 @@
-package com.myname.commandmodid;
+package com.myname.commandmodid.packets;
 
 import net.minecraft.client.Minecraft;
 
@@ -50,7 +50,7 @@ public class PacketTimerText implements IMessage {
 
                     @Override
                     public void run() {
-                        com.myname.commandmodid.TimerOverlay.timerText = message.text;
+                        com.myname.commandmodid.timers.TimerOverlay.timerText = message.text;
                     }
                 });
             return null;

@@ -1,4 +1,4 @@
-package com.myname.commandmodid;
+package com.myname.commandmodid.timers;
 
 import java.util.HashMap;
 import java.util.LinkedList;

@@ -5,6 +5,21 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.myname.commandmodid.multiFlags.FlagListCommand;
+import com.myname.commandmodid.multiFlags.MFlagPointCommand;
+import com.myname.commandmodid.multiFlags.MultiFlagBlockPlacementHandler;
+import com.myname.commandmodid.multiFlags.TpFlagCommand;
+import com.myname.commandmodid.packets.PacketAllFlags;
+import com.myname.commandmodid.packets.PacketAnnouncement;
+import com.myname.commandmodid.packets.PacketFlagBeam;
+import com.myname.commandmodid.packets.PacketMultiFlagTimer;
+import com.myname.commandmodid.packets.PacketPersonalMessage;
+import com.myname.commandmodid.packets.PacketTimerText;
+import com.myname.commandmodid.soloFlag.BlockPlacementHandler;
+import com.myname.commandmodid.soloFlag.FlagPointCommand;
+import com.myname.commandmodid.timers.MultiFlagTimerManager;
+import com.myname.commandmodid.utils.FlagSyncHandler;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;

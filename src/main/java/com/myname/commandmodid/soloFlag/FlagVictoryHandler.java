@@ -1,9 +1,13 @@
-package com.myname.commandmodid;
+package com.myname.commandmodid.soloFlag;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.StatCollector;
+
+import com.myname.commandmodid.CommandMod;
+import com.myname.commandmodid.packets.PacketAnnouncement;
+import com.myname.commandmodid.utils.FlagColors;
 
 public class FlagVictoryHandler {
 

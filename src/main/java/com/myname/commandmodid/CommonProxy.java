@@ -1,5 +1,10 @@
 package com.myname.commandmodid;
 
+import com.myname.commandmodid.multiFlags.MFlagPointCommand;
+import com.myname.commandmodid.multiFlags.TpFlagCommand;
+import com.myname.commandmodid.packets.PacketAnnouncement;
+import com.myname.commandmodid.packets.PacketTimerText;
+
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;

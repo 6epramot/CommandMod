@@ -1,4 +1,4 @@
-package com.myname.commandmodid;
+package com.myname.commandmodid.utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,10 @@ import net.minecraft.entity.Entity;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 import org.lwjgl.opengl.GL11;
+
+import com.myname.commandmodid.multiFlags.MFlagPointCommand;
+import com.myname.commandmodid.soloFlag.BlockPlacementHandler;
+import com.myname.commandmodid.soloFlag.FlagPointCommand;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 

@@ -1,4 +1,4 @@
-package com.myname.commandmodid;
+package com.myname.commandmodid.utils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -6,6 +6,8 @@ import java.util.Set;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
+import com.myname.commandmodid.multiFlags.MFlagPointCommand;
 
 public class FlagUtilities {
 

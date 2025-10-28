@@ -1,10 +1,13 @@
-package com.myname.commandmodid;
+package com.myname.commandmodid.packets;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+
+import com.myname.commandmodid.multiFlags.MFlagPointCommand;
+import com.myname.commandmodid.utils.BeaconBeamHandler;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;

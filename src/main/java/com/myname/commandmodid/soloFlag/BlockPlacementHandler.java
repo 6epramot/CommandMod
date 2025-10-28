@@ -1,4 +1,4 @@
-package com.myname.commandmodid;
+package com.myname.commandmodid.soloFlag;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -15,6 +15,14 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent;
+
+import com.myname.commandmodid.CommandMod;
+import com.myname.commandmodid.packets.PacketAnnouncement;
+import com.myname.commandmodid.packets.PacketFlagBeam;
+import com.myname.commandmodid.packets.PacketPersonalMessage;
+import com.myname.commandmodid.packets.PacketTimerText;
+import com.myname.commandmodid.timers.PhaseActionBarTimer;
+import com.myname.commandmodid.utils.FlagColors;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
